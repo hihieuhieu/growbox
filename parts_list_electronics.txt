@@ -1,0 +1,16 @@
+- Arduino UNO
+- Power supply for Arduino
+- USB cable B for Arduino
+- enough jumpers and wires
+- WiFi module ESP8266#
+- Digital thermometer DS18B20
+- 4.7k resistor for T-sensor
+- LCD display or similar
+- Humidity sensor DHT11
+
+Temperature
+https://starthardware.org/arduino-ds18b20-temperaturmessung-mit-digitalem-sensor/
+
+WiFi
+https://circuitdigest.com/microcontroller-projects/sending-arduino-data-to-webpage
+
