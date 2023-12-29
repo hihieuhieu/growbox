@@ -27,9 +27,9 @@ sets pinModes.
 #define DPIN_STM_ENBL 99       // enable
 #define DPIN_STM_DIR 99        // direction
 #define DPIN_STM_PUL 99        // pulse
-#define DPIN_STM_CH_ENBL 99    // output voltage to check if stage has reached maximum
-#define APIN_STM_CH_U 99       // did stage reach upper bound? (short?)
-#define APIN_STM_CH_L 99       // did stage reach lower bound? (short?)
+// #define DPIN_STM_CH_ENBL 99    // output voltage to check if stage has reached maximum
+// #define APIN_STM_CH_U 99       // did stage reach upper bound? (short?)
+// #define APIN_STM_CH_L 99       // did stage reach lower bound? (short?)
 extern float stm_glheight_upper_short;
 extern float stm_glheight_lower_short;
 extern float stm_glheight_short_treshold;
@@ -43,7 +43,7 @@ extern bool stm_glheight_motor_running;     // is motor running?
 #define DPIN_LB_3 99
 #define DPIN_LB_4 99
 #define DPIN_LB_5 99
-extern int stage_position = -1;     // -1 upon initialization. {1, 2, 3, 4, 5} when light barrier is reached
+extern int stage_position;
 
 // Relais
 #define DPIN_REL_GL1 99        // growlight
@@ -53,19 +53,19 @@ extern int stage_position = -1;     // -1 upon initialization. {1, 2, 3, 4, 5} w
 #define DPIN_REL_FAN2 99       // fan2
 #define DPIN_REL_FAN3 99       // fan3
 #define DPIN_REL_STM 99        // enable motor driver power supply
-extern int rel_gl1_on = 8;
-extern int rel_gl1_off = 20;
-extern int rel_gl2_on = 8;
-extern int rel_gl2_off = 20;
-extern int rel_gl3_on = 6;
-extern int rel_gl3_off = 8;
+extern int rel_gl1_on;
+extern int rel_gl1_off;
+extern int rel_gl2_on;
+extern int rel_gl2_off;
+extern int rel_gl3_on;
+extern int rel_gl3_off;
 
-extern int rel_fan1_on = 8;
-extern int rel_fan1_off = 20;
-extern int rel_fan2_on = 8;
-extern int rel_fan2_off = 20;
-extern int rel_fan3_on = 6;
-extern int rel_fan3_off = 8;
+extern int rel_fan1_on;
+extern int rel_fan1_off;
+extern int rel_fan2_on;
+extern int rel_fan2_off;
+extern int rel_fan3_on;
+extern int rel_fan3_off;
 
 
 // ESP8266 Serial connection

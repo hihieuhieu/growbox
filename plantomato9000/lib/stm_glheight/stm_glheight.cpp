@@ -2,10 +2,10 @@
 
 #include "stm_glheight.h"
 
-float stm_glheight_upper_short = 1000;    // todo: check this value
-float stm_glheight_lower_short = 1000;    // todo: check this value
-float stm_glheight_short_treshold = 50 ;  // todo: check on this treshold
-bool stm_glheight_short_checkmark = false;
+// float stm_glheight_upper_short = 1000;    // todo: check this value
+// float stm_glheight_lower_short = 1000;    // todo: check this value
+// float stm_glheight_short_treshold = 50 ;  // todo: check on this treshold
+// bool stm_glheight_short_checkmark = false;
 int stm_glheight_motor_delay = 200;      //µs
 bool stm_glheight_motor_running = false;
 
@@ -21,6 +21,19 @@ bool stm_glheight_islimit_reached(){
     return stm_glheight_short_checkmark;
 }
 */
+
+void stm_stage_initialization(){
+    digitalWrite(DPIN_STM_DIR,HIGH); // todo check if HIGH relates to up-movement
+    stm_glheight_motor_running = true;
+    while (stm_glheight_motor_running){
+        _stm_glheight_run_motor();
+        stm_stage_current_position();
+        if (stage_position != -1){
+            stm_glheight_stop();
+            break;
+        }
+    }
+}
 
 void stm_stage_current_position(){
     if (digitalRead(DPIN_LB_1) == LOW){
@@ -49,9 +62,18 @@ void stm_glheight_toggle(String mode){
     digitalWrite(DPIN_STM_ENBL, state ? HIGH : LOW);
 }
 
-void stm_glheight_speed(int delay_time){
+void stm_glheight_speed(String speed){
     // adjust rpm of motor: higher delay_time -> slower motor
-    stm_glheight_motor_delay = delay_time;
+    if (speed == "slow"){
+        stm_glheight_motor_delay = 1000;
+    }
+    else if (speed == "medium"){
+        stm_glheight_motor_delay = 500;
+    }
+    else if (speed == "fast"){
+        stm_glheight_motor_delay = 100;
+    }
+    else {printf("Not a valid speed statement.");}
 }
 
 /*
@@ -75,6 +97,11 @@ void stm_glheight_move(String direction, int position){
             break;
         }
 
+        stm_stage_current_position();
+
+        if (stage_position == position){
+            stm_glheight_stop();
+        }
 /*
         // growlight reached maximum
         if (stm_glheight_islimit_reached() == true){ // todo: check case: if there is a contact, i.e. growlight is at a maximum position, does it break instantly?

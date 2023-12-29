@@ -13,11 +13,12 @@ a step motor.
 #include <Arduino.h>
 #include "config.h"
 
-bool stm_glheight_islimit_reached();
+//bool stm_glheight_islimit_reached();
+void stm_stage_initialization();
 void stm_glheight_toggle(String);
-void stm_glheight_speed(int);
+void stm_glheight_speed(String);
 void _stm_glheight_run_motor();
-void stm_glheight_move(String);
+void stm_glheight_move(String, int);
 void stm_glheight_stop();
 void stm_stage_current_position();
 
