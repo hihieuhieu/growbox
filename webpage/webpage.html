@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" class="js-focus-visible">
+
+<title>Plantomato9000</title>
+  
+  <style>
+    table {
+      position: relative;
+      width:100%;
+      border-spacing: 0px;
+    }
+    tr { /*row*/
+      border: 1px solid white;
+      font-family: "Courier New", sans-serif;
+      font-size: 20px;
+    }
+    th { /*heading*/
+      height: 20px;
+      padding: 3px 15px;
+      background-color: #6d5f5f;
+      color: #FFFFFF !important;
+      }
+    td { /*data*/
+      height: 20px;
+      padding: 3px 15px;
+    }
+    canvas {
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+    }
+    .tabledata {
+      font-size: 24px;
+      position: relative;
+      padding-left: 5px;
+      padding-top: 5px;
+      height:   25px;
+      border-radius: 5px;
+      color: #FFFFFF;
+      line-height: 20px;
+      transition: all 200ms ease-in-out;
+      background-color: #00AA00;
+    }
+    .fanrpmslider {
+      width: 30%;
+      height: 55px;
+      outline: none;
+      height: 25px;
+    }
+    .bodytext {
+      font-family: "Courier New", sans-serif;
+      font-size: 24px;
+      text-align: left;
+      font-weight: light;
+      border-radius: 5px;
+      display:inline;
+    }
+    .navbar {
+      width: 100%;
+      height: 50px;
+      margin: 0;
+      padding: 10px 0px;
+      background-color: #FFF;
+      color: #000000;
+      border-bottom: 8px solid #782929;
+    }
+    .fixed-top {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1030;
+    }
+    .navtitle {
+      float: left;
+      height: 50px;
+      font-family: "Courier New", sans-serif;
+      font-size: 50px;
+      font-weight: bold;
+      line-height: 50px;
+      padding-left: 20px;
+    }
+   .navheading {
+     position: fixed;
+     left: 65%;
+     height: 50px;
+     font-family: "Courier New", sans-serif;
+     font-size: 20px;
+     font-weight: bold;
+     line-height: 20px;
+     padding-right: 20px;
+   }
+   .navdata {
+      justify-content: flex-end;
+      position: fixed;
+      left: 70%;
+      height: 50px;
+      font-family: "Courier New", sans-serif;
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 20px;
+      padding-right: 20px;
+   }
+   .navauthor {
+      position: fixed;
+      left: 50%;
+      font-family: "Courier New", sans-serif;
+      font-size: 24px;
+      text-align: left;
+      font-weight: light;
+      border-radius: 5px;
+      display:inline;
+   }
+    .category {
+      font-family: "Courier New", sans-serif;
+      font-weight: bold;
+      font-size: 32px;
+      line-height: 50px;
+      padding: 20px 10px 0px 10px;
+      color: #000000;
+    }
+    .subcategory {
+      font-family: "Courier New", sans-serif;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 50px;
+      padding: 20px 10px 0px 10px;
+      color: #000000;
+    }
+
+    .heading {
+      font-family: "Courier New", sans-serif;
+      font-weight: normal;
+      font-size: 28px;
+      text-align: left;
+    }
+  
+    .btn {
+      background-color: #444444;
+      border: none;
+      color: rgb(195, 119, 119);
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    .foot {
+      font-family: "Courier New", sans-serif;
+      font-size: 20px;
+      position: relative;
+      height:   30px;
+      text-align: center;   
+      color: #AAAAAA;
+      line-height: 20px;
+    }
+    .container {
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Removes dot in list of checkboxes */
+    #checkboxes ul {
+      margin: 0;
+      list-style: none;
+      float: left;
+    }
+
+    /* Increase the size of the checkboxes */
+    #checkboxes ul li input[type="checkbox"] {
+      transform: scale(2); /* Adjust the scale factor as needed */
+      margin-right: 10px; /* Add some spacing between the checkbox and the label */
+      margin-bottom: 15px;
+    }
+
+    /*TOGGLE SWITCHES----------------------------------------*/
+
+    /* Basic styles for the toggle switches */
+    .toggle-switch {
+      display: inline-block;
+      margin-right: 10px; /* Adjust spacing between switches */
+    }
+
+    .toggle-input {
+      display: none;
+    }
+
+    .toggle-label {
+      display: block;
+      width: 40px; /* Width of the toggle switch */
+      height: 20px; /* Height of the toggle switch */
+      background-color: #ccc;
+      border-radius: 20px; /* Makes a rounded shape to resemble a toggle */
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-label:before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: 18px; /* Width of the toggle indicator */
+      height: 18px; /* Height of the toggle indicator */
+      border-radius: 50%; /* Makes a circular shape for the toggle indicator */
+      background-color: #fff;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-input:checked + .toggle-label {
+      background-color: #4CAF50; /* Color when the switch is ON */
+    }
+
+    .toggle-input:checked + .toggle-label:before {
+      transform: translateX(20px); /* Moves the indicator to the right when checked */
+    }
+
+    /*------------------------------------------------*/
+
+    table tr:first-child th:first-child {
+      border-top-left-radius: 5px;
+    }
+    table tr:first-child th:last-child {
+      border-top-right-radius: 5px;
+    }
+    table tr:last-child td:first-child {
+      border-bottom-left-radius: 5px;
+    }
+    table tr:last-child td:last-child {
+      border-bottom-right-radius: 5px;
+    }
+    
+  </style>
+  <!-- Top bar -->
+  <body style="background-color: #98bdbd" onload="process()">
+    <header>
+      <div class="navbar fixed-top">
+          <div class="container">
+            <div class="navtitle">PLANTOMATO 9000 - Dashboard</div>
+            <div class="navdata" id = "date">mm/dd/yyyy</div>
+            <div class="navheading">Date</div><br>
+            <div class="navdata" id = "time">00:00:00</div>
+            <div class="navheading">Time</div>
+            <div class="navauthor">Hieu Philip Hoang</div>
+          </div>
+      </div>
+    </header>
+  
+    <!-- Plots -->
+    <main class="container" style="margin-top:70px">
+      <div class="category">Live Data</div>
+
+      <div class="charts-container" style="display: flex;">
+        <div style="flex: 1;">
+          <div class="subcategory">Temperature</div>
+          <canvas id="temperature_chart" style="width:100%;max-width:600px"></canvas>
+        </div>
+        <div style="flex: 1;">
+          <div class="subcategory">Humidity</div>
+          <canvas id="humidity_chart" style="width:100%;max-width:600px"></canvas>
+        </div>
+        <div style="flex: 1;">
+          <div class="subcategory">Moisture</div>
+          <canvas id="moisture_chart" style="width:100%;max-width:600px"></canvas>
+        </div>
+      </div>
+
+      <br>
+
+      <!-- GROWLIGHTS -->
+      <div class="category">Growlights</div>
+      <div class="sub-container" style="display: flex;">
+        <div style="flex: 1;">
+          <!-- Growlight-stage movement -->
+          <div class="subcategory">Move growlight stage</div>
+          <div id="checkboxes" class="bodytext">
+            <ul>
+              <li><input type="checkbox" class="selective_checkbox"> Position 1</li>
+              <li><input type="checkbox" class="selective_checkbox"> Position 2</li>
+              <li><input type="checkbox" class="selective_checkbox"> Position 3</li>
+              <li><input type="checkbox" class="selective_checkbox"> Position 4</li>
+              <li><input type="checkbox" class="selective_checkbox"> Position 5</li>
+            </ul>
+          </div>
+        </div>
+        <div style="flex: 1;">
+          <div class="subcategory">Toggle growlights</div>
+          <div class="toggle-switches">
+            <div class="toggle-switch">
+              <input type="checkbox" id="switch1" class="toggle-input">
+              <label for="switch1" class="toggle-label"></label>
+            </div>
+            <div class="toggle-switch">
+              <input type="checkbox" id="switch2" class="toggle-input">
+              <label for="switch2" class="toggle-label"></label>
+            </div>
+            <div class="toggle-switch">
+              <input type="checkbox" id="switch3" class="toggle-input">
+              <label for="switch3" class="toggle-label"></label>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <!-- Toggle growlights on/off -->
+
+      <!-- Toggle fans on/off -->
+
+      <!--  -->
+
+
+      <table style="width:50%">
+      <colgroup>
+        <col span="1" style="background-color:rgb(230,230,230); width: 20%; color:#000000 ;">
+        <col span="1" style="background-color:rgb(200,200,200); width: 15%; color:#000000 ;">
+        <col span="1" style="background-color:rgb(180,180,180); width: 15%; color:#000000 ;">
+      </colgroup>
+      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
+      <tr>
+        <th colspan="1"><div class="heading">Pin</div></th>
+        <th colspan="1"><div class="heading">Bits</div></th>
+        <th colspan="1"><div class="heading">Volts</div></th>
+      </tr>
+      <tr>
+        <td><div class="bodytext">Analog pin 34</div></td>
+        <td><div class="tabledata" id = "b0"></div></td>
+        <td><div class="tabledata" id = "v0"></div></td>
+      </tr>
+      <tr>
+        <td><div class="bodytext">Analog pin 35</div></td>
+        <td><div class="tabledata" id = "b1"></div></td>
+        <td><div class="tabledata" id = "v1"></div></td>
+      </tr>
+        <tr>
+        <td><div class="bodytext">Digital switch</div></td>
+        <td><div class="tabledata" id = "switch"></div></td>
+      </tr>
+      </table>
+    </div>
+    <br>
+    <div class="category">Sensor Controls</div>
+    <br>
+    <div class="bodytext">LED </div>
+    <button type="button" class = "btn" id = "btn0" onclick="ButtonPress0()">Toggle</button>
+    </div>
+    <br>
+    <div class="bodytext">Switch</div>
+    <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
+    </div>
+    <br>
+    <br>
+    <div class="bodytext">Fan Speed Control (RPM: <span id="fanrpm"></span>)</div>
+    <br>
+    <input type="range" class="fanrpmslider" min="0" max="255" value = "0" width = "0%" oninput="UpdateSlider(this.value)"/>
+    <br>
+    <br>
+  </main>
+
+  <footer div class="foot" id = "temp" >ESP32 Web Page Creation and Data Update Demo</div></footer>
+  <script src="chart.js"></script>
+  <script src="javascript.js"></script>
+  </body>
+
+
+  <script type = "text/javascript">

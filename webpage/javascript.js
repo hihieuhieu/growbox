@@ -1,0 +1,184 @@
+var array_length = 10;
+var xValues = [];
+for (let i = 0; i < array_length; i++) {
+  xValues[i] = i;
+}
+
+var yValues = [];
+
+const temperature_chart = new Chart("temperature_chart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,255,1.0)",
+      borderColor: "rgba(0,0,255,0.1)",
+      borderWidth: 2, //linewidth
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+      yAxes: [{
+        scaleLabel: {
+            display: true,
+            labelString: 'Temperature (°C)'
+        },
+        ticks: {min: 5, max:35}}],
+      xAxes: [{
+            display: false
+        },
+        {
+            scaleLabel: {
+                display: true,
+                labelString: 'Time [hh:mm]'
+            }
+        }]
+
+    }
+  }
+});
+
+
+const humidity_chart = new Chart("humidity_chart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{
+      fill: false,
+      lineTension: 0,
+      backgroundColor: "rgba(0,0,255,1.0)",
+      borderColor: "rgba(0,0,255,0.1)",
+      borderWidth: 2, //linewidth
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+      yAxes: [{
+        scaleLabel: {
+            display: true,
+            labelString: 'Humidity [%]'
+        },
+        ticks: {min: 0, max:100}}],
+      xAxes: [{
+            display: false
+        },
+        {
+            scaleLabel: {
+                display: true,
+                labelString: 'Time [hh:mm]'
+            }
+        }]
+
+    }
+  }
+});
+
+
+const moisture_chart = new Chart("moisture_chart", {
+type: "line",
+data: {
+labels: xValues,
+datasets: [{
+  fill: false,
+  lineTension: 0,
+  backgroundColor: "rgba(0,0,255,1.0)",
+  borderColor: "rgba(0,0,255,0.1)",
+  borderWidth: 2, //linewidth
+  data: yValues
+}]
+},
+options: {
+legend: {display: true},
+scales: {
+  yAxes: [{
+    scaleLabel: {
+        display: true,
+        labelString: 'Moisture [a.u.]',
+        fontSize: 14,
+        fontStyle: 'bold',
+        fontColor: '#333'
+    },
+    ticks: {
+        min: 0, 
+        max:500,
+        fontSize: 16,
+        fontStyle: 'bold',
+        fontColor: '#333'
+      }
+    
+    }],
+  xAxes: [{
+        display: false,
+    },
+    {
+        scaleLabel: {
+            display: true,
+            labelString: 'Time [hh:mm]',
+            fontSize: 14,
+            fontStyle: 'bold',
+            fontColor: '#333'
+        },
+        ticks: {
+          min: 0, 
+          max: 24,
+          fontSize: 16,
+          fontStyle: 'bold',
+          fontColor: '#333'
+        }
+    }]
+
+}
+}
+});
+
+/*Make selective checkbox: unchecks other checkbox when one is chosen*/
+document.addEventListener("DOMContentLoaded", function() {
+  const checkboxes = document.querySelectorAll('.selective_checkbox');
+
+  checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+      if (this.checked) {
+        checkboxes.forEach(function(otherCheckbox) {
+          if (otherCheckbox !== checkbox) {
+            otherCheckbox.checked = false;
+          }
+        });
+      }
+    });
+  });
+});
+
+
+var output = document.getElementById('ID_RANDOM_INTENSITY_VALUE');
+
+var Socket;
+
+function init() {
+  Socket = new WebSocket('ws://' + window.location.hostname + ':81/');
+  Socket.onmessage = function(event) {
+    processCommand(event);
+  };
+}
+
+function processCommand(event) {
+  var obj = JSON.parse(event.data);
+  var type = obj.type;
+  if (type.localeCompare("graph_update") == 0) {
+    console.log(obj.value);
+    var temp_values = obj.value;
+    for(var i=0, length = temp_values.length; i < length; i++) {
+      temp_values[i] = temp_values[i] / 10;
+    }
+    myChart.data.datasets[0].data = temp_values;
+    myChart.update();
+  }
+}
+window.onload = function(event) {
+  init();
+}

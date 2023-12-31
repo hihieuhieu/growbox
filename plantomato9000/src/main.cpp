@@ -19,8 +19,6 @@ void initialize_pins();
 void setup() {
   // initialize required pins as output
   initialize_pins();
-  // // initialize values
-  // initialize_values();
   // initialize stage position
   stm_stage_initialization();
   // initialize DHT11 sensors
@@ -160,10 +158,8 @@ void loop() {
       sprintf(string, "csms1_%.1f_csms2_%.1f_csms3_%.1f", (double)csms1, (double)csms2, (double)csms3);
       Serial.println(string);
     }
-  }
 
-
-  
+  }  
 }
 
 // pin modes
@@ -183,21 +179,3 @@ void initialize_pins(){
     pinMode(DPIN_LB_2, INPUT);
 }
 
-
-// void initialize_values(){
-//   stage_position = -1; // -1 upon initialization. {1, 2, 3, 4, 5} when light barrier is reached
-
-//   rel_gl1_on = 8;
-//   rel_gl1_off = 20;
-//   rel_gl2_on = 8;
-//   rel_gl2_off = 20;
-//   rel_gl3_on = 6;
-//   rel_gl3_off = 8;
-
-//   rel_fan1_on = 8;
-//   rel_fan1_off = 20;
-//   rel_fan2_on = 8;
-//   rel_fan2_off = 20;
-//   rel_fan3_on = 6;
-//   rel_fan3_off = 8;
-// }
