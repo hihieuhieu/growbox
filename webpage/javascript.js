@@ -139,7 +139,7 @@ scales: {
 
 /*Make selective checkbox: unchecks other checkbox when one is chosen*/
 document.addEventListener("DOMContentLoaded", function() {
-  const checkboxes = document.querySelectorAll('.selective_checkbox');
+  const checkboxes = document.querySelectorAll('.selective_radio');
 
   checkboxes.forEach(function(checkbox) {
     checkbox.addEventListener('change', function() {
@@ -155,6 +155,35 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+// Get main switch and other switches
+const allSwitches = document.getElementById('allSwitches');
+const growlight_switch_1 = document.getElementById('growlight_switch_1');
+const growlight_switch_2 = document.getElementById('growlight_switch_2');
+const growlight_switch_3 = document.getElementById('growlight_switch_3');
+
+// Function to check and update main switch state
+function update_allSwitches() {
+  const allSwitches = [growlight_switch_1, growlight_switch_2, growlight_switch_3];
+  const allSwitchesChecked = allSwitches.every(switchElem => switchElem.checked);
+  allSwitches.checked = allSwitchesChecked;
+}
+
+// Add event listeners to individual switches
+growlight_switch_1.addEventListener('change', update_allSwitches);
+growlight_switch_2.addEventListener('change', update_allSwitches);
+growlight_switch_3.addEventListener('change', update_allSwitches);
+
+// Add event listener to main switch for convenience (optional)
+allSwitches.addEventListener('change', function() {
+  const state = this.checked;
+  growlight_switch_1.checked = state;
+  growlight_switch_2.checked = state;
+  growlight_switch_3.checked = state;
+});
+
+
+
+/*--random stuff from template*/
 var output = document.getElementById('ID_RANDOM_INTENSITY_VALUE');
 
 var Socket;

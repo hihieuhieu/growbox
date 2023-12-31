@@ -161,62 +161,98 @@
       margin: 0 auto;
     }
 
-    /* Removes dot in list of checkboxes */
-    #checkboxes ul {
+    /* Removes bullet points from the list */
+    .radio-list {
       margin: 0;
+      padding: 0;
       list-style: none;
-      float: left;
     }
 
-    /* Increase the size of the checkboxes */
-    #checkboxes ul li input[type="checkbox"] {
-      transform: scale(2); /* Adjust the scale factor as needed */
-      margin-right: 10px; /* Add some spacing between the checkbox and the label */
+    /* Increase the size of the radio buttons */
+    .radio-list li {
       margin-bottom: 15px;
     }
 
-    /*TOGGLE SWITCHES----------------------------------------*/
-
-    /* Basic styles for the toggle switches */
-    .toggle-switch {
-      display: inline-block;
-      margin-right: 10px; /* Adjust spacing between switches */
+    .radio-list li input[type="radio"].selective_radio {
+      transform: scale(1.5); /* Adjust the scale factor as needed */
+      margin-right: 10px; /* Add some spacing between the checkbox and the label */
     }
 
+
+    /*TOGGLE SWITCHES----------------------------------------*/
+
+    .toggle-switches {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #ccc;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
     .toggle-input {
       display: none;
     }
-
-    .toggle-label {
-      display: block;
-      width: 40px; /* Width of the toggle switch */
-      height: 20px; /* Height of the toggle switch */
-      background-color: #ccc;
-      border-radius: 20px; /* Makes a rounded shape to resemble a toggle */
-      position: relative;
-      cursor: pointer;
+    
+    /* Updated styles for the toggle switches when checked and unchecked */
+    .toggle-input:checked + .toggle-label {
+      background-color: #4CAF50;
     }
-
+    
     .toggle-label:before {
       content: '';
       position: absolute;
-      top: 1px;
-      left: 1px;
-      width: 18px; /* Width of the toggle indicator */
-      height: 18px; /* Height of the toggle indicator */
-      border-radius: 50%; /* Makes a circular shape for the toggle indicator */
-      background-color: #fff;
+      top: 2px;
+      left: 2px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: white;
       transition: transform 0.3s ease;
     }
-
-    .toggle-input:checked + .toggle-label {
-      background-color: #4CAF50; /* Color when the switch is ON */
-    }
-
+    
     .toggle-input:checked + .toggle-label:before {
-      transform: translateX(20px); /* Moves the indicator to the right when checked */
+      transform: translateX(30px);
+    }
+    
+    .label-text {
+      margin-left: 20px;
+      font-size: 24px;
+      font-family: "Courier New", sans-serif;
+    }
+    
+    /* All Switch Styles */
+      .toggle-growlight_switch.toggle-growlight_all .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 60px; /* Adjust width for the master switch */
+      height: 30px; /* Adjust height for the master switch */
+      background-color: #ccc;
+      border-radius: 15px; /* Adjust border-radius for the master switch */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
+    .toggle-growlight_switch.toggle-growlight_all .toggle-input:checked + .toggle-label {
+      background-color: #4CAF50; /* Change color when main switch is ON */
+    }
+
+
+    
+    
     /*------------------------------------------------*/
 
     table tr:first-child th:first-child {
@@ -270,37 +306,106 @@
       <br>
 
       <!-- GROWLIGHTS -->
-      <div class="category">Growlights</div>
-      <div class="sub-container" style="display: flex;">
-        <div style="flex: 1;">
-          <!-- Growlight-stage movement -->
-          <div class="subcategory">Move growlight stage</div>
-          <div id="checkboxes" class="bodytext">
-            <ul>
-              <li><input type="checkbox" class="selective_checkbox"> Position 1</li>
-              <li><input type="checkbox" class="selective_checkbox"> Position 2</li>
-              <li><input type="checkbox" class="selective_checkbox"> Position 3</li>
-              <li><input type="checkbox" class="selective_checkbox"> Position 4</li>
-              <li><input type="checkbox" class="selective_checkbox"> Position 5</li>
-            </ul>
+      <div class="sub-container" style="display: flex; flex-direction: column;">
+        <div class="category">Growlights</div>
+        <div class="sub-container" style="display: flex;">
+          <div style="flex: 1;">
+            <!-- Growlight-stage movement -->
+            <div class="subcategory">Move growlight stage</div>
+            <div id="checkboxes" class="bodytext">
+              <ul class="radio-list">
+                <li><input type="radio" class="selective_radio" id="position1"><label for="position1">Position 1</label></li>
+                <li><input type="radio" class="selective_radio" id="position2"><label for="position2">Position 2</label></li>
+                <li><input type="radio" class="selective_radio" id="position3"><label for="position3">Position 3</label></li>
+                <li><input type="radio" class="selective_radio" id="position4"><label for="position4">Position 4</label></li>
+                <li><input type="radio" class="selective_radio" id="position5"><label for="position5">Position 5</label></li>
+              </ul>
+            </div>
+          </div>
+          <!-- Toggle growlights on/off -->
+          <div style="flex: 1;">
+            <div class="subcategory">Toggle growlights</div>
+            <div class="toggle-growlight_switches">
+              <div class="toggle-growlight_switch toggle-growlight_all">
+                <input type="checkbox" id="allSwitches" class="toggle-input">
+                <label for="allSwitches" class="toggle-label"></label>
+                <span class="label-text">Toggle all</span>
+              </div>
+              <div class="toggle-growlight_switch_">
+                <input type="checkbox" id="growlight_switch_1" class="toggle-input">
+                <label for="growlight_switch_1" class="toggle-label"></label>
+                <span class="label-text">Growlight 1</span>
+              </div>
+              <div class="toggle-growlight_switch_">
+                <input type="checkbox" id="growlight_switch_2" class="toggle-input">
+                <label for="growlight_switch_2" class="toggle-label"></label>
+                <span class="label-text">Growlight 2</span>
+              </div>
+              <div class="toggle-growlight_switch_">
+                <input type="checkbox" id="growlight_switch_3" class="toggle-input">
+                <label for="growlight_switch_3" class="toggle-label"></label>
+                <span class="label-text">Growlight X</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div style="flex: 1;">
-          <div class="subcategory">Toggle growlights</div>
-          <div class="toggle-switches">
-            <div class="toggle-switch">
-              <input type="checkbox" id="switch1" class="toggle-input">
-              <label for="switch1" class="toggle-label"></label>
+
+        <!--  -->
+
+        <div class="sub-container" style="display: flex; flex-direction: column;">
+          <div class="category">Fans</div>
+          <div class="sub-container" style="display: flex;">
+            <div style="flex: 1;">
+              <!-- Fan-stage movement -->
+              <div class="subcategory">Move Fan stage</div>
+              <div id="checkboxes" class="bodytext">
+                <ul class="radio-list">
+                  <li><input type="radio" class="selective_radio" id="position1"><label for="position1">Position 1</label></li>
+                  <li><input type="radio" class="selective_radio" id="position2"><label for="position2">Position 2</label></li>
+                  <li><input type="radio" class="selective_radio" id="position3"><label for="position3">Position 3</label></li>
+                  <li><input type="radio" class="selective_radio" id="position4"><label for="position4">Position 4</label></li>
+                  <li><input type="radio" class="selective_radio" id="position5"><label for="position5">Position 5</label></li>
+                </ul>
+              </div>
             </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="switch2" class="toggle-input">
-              <label for="switch2" class="toggle-label"></label>
-            </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="switch3" class="toggle-input">
-              <label for="switch3" class="toggle-label"></label>
+            <!-- Toggle Fans on/off -->
+            <div style="flex: 1;">
+              <div class="subcategory">Toggle Fans</div>
+              <div class="toggle-switches">
+                <div class="toggle-switch toggle-master">
+                  <input type="checkbox" id="masterSwitch" class="toggle-input">
+                  <label for="masterSwitch" class="toggle-label"></label>
+                  <span class="label-text">Toggle all</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="switch1" class="toggle-input">
+                  <label for="switch1" class="toggle-label"></label>
+                  <span class="label-text">Fan 1</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="switch2" class="toggle-input">
+                  <label for="switch2" class="toggle-label"></label>
+                  <span class="label-text">Fan 2</span>
+                </div>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="switch3" class="toggle-input">
+                  <label for="switch3" class="toggle-label"></label>
+                  <span class="label-text">Fan X</span>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+        
+
+      </div>
+      
+        
+        
+        
+        
+        
+        
           
         </div>
       </div>
@@ -318,9 +423,9 @@
       <br>
       <br>
       <br>
-      <!-- Toggle growlights on/off -->
+      <!-- Toggle growlights on/off configuration -->
 
-      <!-- Toggle fans on/off -->
+      <!-- Toggle fans on/off configuration -->
 
       <!--  -->
 
