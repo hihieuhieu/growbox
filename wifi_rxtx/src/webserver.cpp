@@ -31,20 +31,8 @@ void webSocketEvent(byte num, WStype_t type, uint8_t * payload, size_t length){
       return;
     }
     else {
-      // {growlight, fan, dht11, csms, growlight_height, }
-      const char* component = doc["type"];
-      if (component == "growlight"){
-        // do sth
-      }
-      else if (component == "fan"){
-        // do sth
-      }
-      const int component_number = doc["value"];
-      const char* component_toggle = doc["toggle"];
-      const float component_value = doc["value"];
-
-      // include all the stuff what should happen when e.g. button 1 is pressed. I.e. what is printed to serial
-      
+      // directly print to serial. choose correct serial connection. 
+      // or: check: create from json object a string
     }
     Serial.println("");
     break;

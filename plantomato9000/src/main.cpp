@@ -114,6 +114,32 @@ void loop() {
       }
     }
 
+    // update fan toggle hours
+    // received string: "update_fan_toggle_{int}_{int}_{int}_{int}_{int}_{int}"
+    // int ∈ ℕ∈[0,24]
+    else if (rx_string.indexOf("update_fan_toggle_")){
+      int sep_1 = rx_string.indexOf('_', 16);
+      int sep_2 = rx_string.indexOf('_', sep_1 + 1);
+      int sep_3 = rx_string.indexOf('_', sep_2 + 1);
+      int sep_4 = rx_string.indexOf('_', sep_3 + 1);
+      int sep_5 = rx_string.indexOf('_', sep_4 + 1);
+      int sep_6 = rx_string.indexOf('_', sep_5 + 1);
+
+      String str1 = rx_string.substring(sep_1 + 1, sep_2);
+      String str2 = rx_string.substring(sep_2 + 1, sep_3);
+      String str3 = rx_string.substring(sep_3 + 1, sep_4);
+      String str4 = rx_string.substring(sep_4 + 1, sep_5);
+      String str5 = rx_string.substring(sep_5 + 1, sep_6);
+      String str6 = rx_string.substring(sep_6 + 1);
+
+      rel_fan1_on = str1.toInt();
+      rel_fan1_off = str2.toInt();
+      rel_fan2_on = str3.toInt();
+      rel_fan2_off = str4.toInt();
+      rel_fan3_on = str5.toInt();
+      rel_fan3_off = str6.toInt();
+    }
+
     // toggle fans manually
     // received string: "manually_toggle_fan_{on, off}_{1, 2, 3}"
     else if (rx_string.indexOf("manually_toggle_fan_")){

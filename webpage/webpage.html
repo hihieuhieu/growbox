@@ -284,8 +284,9 @@
       </div>
     </header>
   
-    <!-- Plots -->
+    
     <main class="container" style="margin-top:70px">
+      <!-- PLOTS -->
       <div class="category">Live Data</div>
 
       <div class="charts-container" style="display: flex;">
@@ -305,14 +306,16 @@
 
       <br>
 
-      <!-- GROWLIGHTS -->
+
+      
       <div class="sub-container" style="display: flex; flex-direction: column;">
+        <!-- GROWLIGHTS CONTROL -->
         <div class="category">Growlights</div>
         <div class="sub-container" style="display: flex;">
           <div style="flex: 1;">
             <!-- Growlight-stage movement -->
             <div class="subcategory">Move growlight stage</div>
-            <div id="checkboxes" class="bodytext">
+            <div id="radio_buttons" class="bodytext">
               <ul class="radio-list">
                 <li><input type="radio" class="selective_radio" id="position1"><label for="position1">Position 1</label></li>
                 <li><input type="radio" class="selective_radio" id="position2"><label for="position2">Position 2</label></li>
@@ -327,8 +330,8 @@
             <div class="subcategory">Toggle growlights</div>
             <div class="toggle-growlight_switches">
               <div class="toggle-growlight_switch toggle-growlight_all">
-                <input type="checkbox" id="allSwitches" class="toggle-input">
-                <label for="allSwitches" class="toggle-label"></label>
+                <input type="checkbox" id="all_growlight_Switches" class="toggle-input">
+                <label for="all_growlight_Switches" class="toggle-label"></label>
                 <span class="label-text">Toggle all</span>
               </div>
               <div class="toggle-growlight_switch_">
@@ -350,134 +353,42 @@
           </div>
         </div>
 
-        <!--  -->
-
-        <div class="sub-container" style="display: flex; flex-direction: column;">
-          <div class="category">Fans</div>
-          <div class="sub-container" style="display: flex;">
-            <div style="flex: 1;">
-              <!-- Fan-stage movement -->
-              <div class="subcategory">Move Fan stage</div>
-              <div id="checkboxes" class="bodytext">
-                <ul class="radio-list">
-                  <li><input type="radio" class="selective_radio" id="position1"><label for="position1">Position 1</label></li>
-                  <li><input type="radio" class="selective_radio" id="position2"><label for="position2">Position 2</label></li>
-                  <li><input type="radio" class="selective_radio" id="position3"><label for="position3">Position 3</label></li>
-                  <li><input type="radio" class="selective_radio" id="position4"><label for="position4">Position 4</label></li>
-                  <li><input type="radio" class="selective_radio" id="position5"><label for="position5">Position 5</label></li>
-                </ul>
+        <!-- FANS -->
+        <div class="category">Fans</div>
+        <div class="sub-container" style="display: flex;">
+          <!-- Toggle Fans on/off -->
+          <div style="flex: 1;">
+            <div class="subcategory">Toggle Fans</div>
+            <div class="toggle-switches">
+              <div class="toggle-switch toggle-master">
+                <input type="checkbox" id="masterSwitch" class="toggle-input">
+                <label for="masterSwitch" class="toggle-label"></label>
+                <span class="label-text">Toggle all</span>
               </div>
-            </div>
-            <!-- Toggle Fans on/off -->
-            <div style="flex: 1;">
-              <div class="subcategory">Toggle Fans</div>
-              <div class="toggle-switches">
-                <div class="toggle-switch toggle-master">
-                  <input type="checkbox" id="masterSwitch" class="toggle-input">
-                  <label for="masterSwitch" class="toggle-label"></label>
-                  <span class="label-text">Toggle all</span>
-                </div>
-                <div class="toggle-switch">
-                  <input type="checkbox" id="switch1" class="toggle-input">
-                  <label for="switch1" class="toggle-label"></label>
-                  <span class="label-text">Fan 1</span>
-                </div>
-                <div class="toggle-switch">
-                  <input type="checkbox" id="switch2" class="toggle-input">
-                  <label for="switch2" class="toggle-label"></label>
-                  <span class="label-text">Fan 2</span>
-                </div>
-                <div class="toggle-switch">
-                  <input type="checkbox" id="switch3" class="toggle-input">
-                  <label for="switch3" class="toggle-label"></label>
-                  <span class="label-text">Fan X</span>
-                </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="switch1" class="toggle-input">
+                <label for="switch1" class="toggle-label"></label>
+                <span class="label-text">Fan 1</span>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="switch2" class="toggle-input">
+                <label for="switch2" class="toggle-label"></label>
+                <span class="label-text">Fan 2</span>
+              </div>
+              <div class="toggle-switch">
+                <input type="checkbox" id="switch3" class="toggle-input">
+                <label for="switch3" class="toggle-label"></label>
+                <span class="label-text">Fan X</span>
               </div>
             </div>
           </div>
         </div>
-        
-
-      </div>
-      
-        
-        
-        
-        
-        
-        
-          
         </div>
       </div>
-      
 
 
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <!-- Toggle growlights on/off configuration -->
 
-      <!-- Toggle fans on/off configuration -->
-
-      <!--  -->
-
-
-      <table style="width:50%">
-      <colgroup>
-        <col span="1" style="background-color:rgb(230,230,230); width: 20%; color:#000000 ;">
-        <col span="1" style="background-color:rgb(200,200,200); width: 15%; color:#000000 ;">
-        <col span="1" style="background-color:rgb(180,180,180); width: 15%; color:#000000 ;">
-      </colgroup>
-      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
-      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
-      <col span="2"style="background-color:rgb(0,0,0); color:#FFFFFF">
-      <tr>
-        <th colspan="1"><div class="heading">Pin</div></th>
-        <th colspan="1"><div class="heading">Bits</div></th>
-        <th colspan="1"><div class="heading">Volts</div></th>
-      </tr>
-      <tr>
-        <td><div class="bodytext">Analog pin 34</div></td>
-        <td><div class="tabledata" id = "b0"></div></td>
-        <td><div class="tabledata" id = "v0"></div></td>
-      </tr>
-      <tr>
-        <td><div class="bodytext">Analog pin 35</div></td>
-        <td><div class="tabledata" id = "b1"></div></td>
-        <td><div class="tabledata" id = "v1"></div></td>
-      </tr>
-        <tr>
-        <td><div class="bodytext">Digital switch</div></td>
-        <td><div class="tabledata" id = "switch"></div></td>
-      </tr>
-      </table>
-    </div>
-    <br>
-    <div class="category">Sensor Controls</div>
-    <br>
-    <div class="bodytext">LED </div>
-    <button type="button" class = "btn" id = "btn0" onclick="ButtonPress0()">Toggle</button>
-    </div>
-    <br>
-    <div class="bodytext">Switch</div>
-    <button type="button" class = "btn" id = "btn1" onclick="ButtonPress1()">Toggle</button>
-    </div>
-    <br>
-    <br>
-    <div class="bodytext">Fan Speed Control (RPM: <span id="fanrpm"></span>)</div>
-    <br>
-    <input type="range" class="fanrpmslider" min="0" max="255" value = "0" width = "0%" oninput="UpdateSlider(this.value)"/>
-    <br>
-    <br>
-  </main>
+    </main>
 
   <footer div class="foot" id = "temp" >ESP32 Web Page Creation and Data Update Demo</div></footer>
   <script src="chart.js"></script>

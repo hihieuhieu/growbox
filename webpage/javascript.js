@@ -156,30 +156,45 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Get main switch and other switches
-const allSwitches = document.getElementById('allSwitches');
+const all_growlight_Switches = document.getElementById('all_growlight_Switches');
 const growlight_switch_1 = document.getElementById('growlight_switch_1');
 const growlight_switch_2 = document.getElementById('growlight_switch_2');
 const growlight_switch_3 = document.getElementById('growlight_switch_3');
 
 // Function to check and update main switch state
-function update_allSwitches() {
-  const allSwitches = [growlight_switch_1, growlight_switch_2, growlight_switch_3];
-  const allSwitchesChecked = allSwitches.every(switchElem => switchElem.checked);
-  allSwitches.checked = allSwitchesChecked;
+function update_all_growlight_Switches() {
+  const all_growlight_SwitchesArray = [growlight_switch_1, growlight_switch_2, growlight_switch_3];
+  const all_growlight_SwitchesChecked = all_growlight_SwitchesArray.every(switchElem => switchElem.checked);
+  
+  all_growlight_Switches.checked = all_growlight_SwitchesChecked;
+  
+  // Check if any switch is unchecked, then uncheck the main switch
+  if (!all_growlight_SwitchesChecked) {
+    all_growlight_Switches.checked = false;
+  }
+  
+  // Check if all switches are checked, then check the main switch
+  if (all_growlight_SwitchesChecked) {
+    all_growlight_Switches.checked = true;
+  }
 }
 
 // Add event listeners to individual switches
-growlight_switch_1.addEventListener('change', update_allSwitches);
-growlight_switch_2.addEventListener('change', update_allSwitches);
-growlight_switch_3.addEventListener('change', update_allSwitches);
+growlight_switch_1.addEventListener('change', update_all_growlight_Switches);
+growlight_switch_2.addEventListener('change', update_all_growlight_Switches);
+growlight_switch_3.addEventListener('change', update_all_growlight_Switches);
 
 // Add event listener to main switch for convenience (optional)
-allSwitches.addEventListener('change', function() {
+all_growlight_Switches.addEventListener('change', function() {
   const state = this.checked;
   growlight_switch_1.checked = state;
   growlight_switch_2.checked = state;
   growlight_switch_3.checked = state;
 });
+
+// Initialize the main switch based on the state of other switches
+update_all_growlight_Switches();
+
 
 
 
