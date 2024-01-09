@@ -30,7 +30,8 @@
 - Arduino <--> ESP8266: UART, JSON strings, serial connection
 - ESP8266 <--> Client: websockets, JSON strings, WiFi
 
-## Send JSON strings Arduino <--> ESP8266:
+## Arduino/ESP8266: Send JSON strings Arduino <--> ESP8266:
+C++
 ```
 ...
 Serial.begin(9600);
@@ -45,7 +46,8 @@ object["key2"] = "keyval2";
 serializeJson(doc, Serial);
 ```
 
-## Receive JSON strings Arduino <--> ESP8266:
+## Arduino/ESP8266: Receive JSON strings Arduino <--> ESP8266:
+C++
 ```
 ...
 Serial.begin(9600);
@@ -56,7 +58,7 @@ if (Serial.available()>0){
     StaticJsonDocument<300> doc;
     // Read JSON document received on port 'Serial'
     // included exception handling
-    DeserializationError err = deserializeJson(doc, Serial1);
+    DeserializationError err = deserializeJson(doc, Serial);
     if (err == DeserializationError:Ok){
         // integer expected
         keyval1 = doc["key1"].as<int>();
@@ -75,18 +77,157 @@ if (Serial.available()>0){
 }
 ```
 
-## Send JSON strings ESP8266 --> Client
+## ESP8266: Send JSON strings ESP8266 --> Client
+C++
 ```
-void sendJson(String l_type, String l_value) {
-    String jsonString = "";                           // create a JSON string for sending data to the client
-    StaticJsonDocument<200> doc;                      // create JSON container
-    JsonObject object = doc.to<JsonObject>();         // create a JSON Object
-    object["type"] = l_type;                          // write data into the JSON object -> I used "type" to identify if LED_selected or LED_intensity is sent and "value" for the actual value
-    object["value"] = l_value;
-    serializeJson(doc, jsonString);                // convert JSON object to string
-    webSocket.broadcastTXT(jsonString);               // send JSON string to all clients
-}
+// create container string
+String jsonString = "";
+// create JSON document
+StaticJsonDocument<200> doc;
+// convert JSON document to object
+JsonObject object = doc.to<JsonObject>();
+// wriite keyvalues into keys
+object["key1"] = keyvalue1;
+object["key2"] = "keyvalue2";
+// convert JSON document to string
+serializeJson(doc, jsonString);
+// send to client
+webSocket.sendTXT(jsonString);
 ```
+
+
+## Client: JS grid
+Javascript
+```
+// create websocket
+const socket = new WebSocket('ws://server_ip:81);
+
+// add event listener: opened connection
+socket.addEventListener('open', function (event){
+    console.log('Connected to websocket server');
+});
+
+// add event listener: message fron server
+socket.addEventListener('message', function (event){
+    const rx_message = JSON.parse(event.data);
+    console.log('Received message: ', rx_message);
+});
+
+// add event listener: websocket error
+socket.addEventListener('error', function (event){
+    console.error('Websocket error: ', event)
+});
+
+// add event listener: closed connection
+socket.addEventListener('close', function (event) {
+    console.log('Connection closed);
+});
+
+// add event listeners for all buttons and switches etc. See below
+...
+
+```
+
+## Client: Send JSON strings Client --> ESP8266
+Javascript
+
+### Radio buttons
+html
+```
+<input type="radio" id="option1" name="options" value="option1">
+<label for="option1">Option 1</label><br>
+<input type="radio" id="option2" name="options" value="option2">
+<label for="option2">Option 2</label><br>
+<input type="radio" id="option3" name="options" value="option3">
+<label for="option3">Option 3</label><br>
+```
+
+JavaScript
+```
+// selects all radio buttons with common name atrribute
+const radioButtons = document.querySelectorAll('input[name="options"]');
+// add change event listener to each radio button
+radioButtons.forEach(button => {
+    button.addEventListener('change', function() {
+    // get value of selected radio button
+    const selectedOption = document.querySelector('input[name="options"]:checked').value;
+
+    // create JSON object containing selected option
+    const data = {
+        "selectedOption": selectedOption
+    };
+
+    // convert to JSON string
+    const jsonString = JSON.stringify(data);
+
+    socket.send(jsonString);    
+    });
+});
+```
+
+### Toggle switch
+html
+```
+<label class="switch">
+    <input type="checkbox" id="toggleSwitch">
+    <span class="slider round"></span>
+</label>
+```
+
+Javascript
+```
+const toggleSwitch = document.getElementById("toggleSwitch");
+    
+toggleSwitch.addEventListener('change', function() {
+    const isSwitchOn = toggleSwitch.checked;
+    
+    console.log('Toggle Switch State:', isSwitchOn);
+    
+    const data = {
+    "toggleState": isSwitchOn
+    };
+
+    const jsonString = JSON.stringify(data);
+
+    socket.send(jsonString);
+});
+```
+
+### Numeric value
+html
+```
+<input type="number" id="numericField" />
+<button onclick="sendData()">Send</button>
+```
+
+JavaScript
+```
+function sendData() {
+    const numericValue = document.getElementById('numericField').value;
+
+    // Create a JSON object with the numeric value
+    const data = {
+    value: parseFloat(numericValue)
+    };
+
+    // Convert JSON object to string before sending
+    const jsonData = JSON.stringify(data);
+
+    // Send the data over the WebSocket connection
+    socket.send(jsonData);
+};
+```
+
+## Client: Receive JSON strings ESP8266 --> Client
+
+```
+socket.onmessage = function(event) {
+    const receivedData = JSON.parse(event.data);
+    const selectedValue = receivedData.key;
+    //assign keyvalue to numeric field, graph, ...
+};
+```
+
 
 ## Arduino Mega --> ESP8266 | ESP8266 --> Client
 - DHT11 data:

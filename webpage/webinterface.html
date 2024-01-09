@@ -34,47 +34,194 @@
             <div class="chart-grid">
                 <div class="chart">
                     <!-- include stuff to plot a chart with according heading-->
-                    <canvas id="temperature_chart" style="width:100%;max-width:600px"></canvas>
+                    <canvas id="temperature_chart" style="width:100%;max-width:300px"></canvas>
                 </div>
                 <div class="chart">
                     <!-- include stuff to plot a chart with according heading-->
-                    <canvas id="humidity_chart" style="width:100%;max-width:600px"></canvas>
+                    <canvas id="humidity_chart" style="width:100%;max-width:300px"></canvas>
                 </div>
                 <div class="chart">
                     <!-- include stuff to plot a chart with according heading-->
-                    <canvas id="moisture_chart" style="width:100%;max-width:600px"></canvas>
+                    <canvas id="moisture_chart" style="width:100%;max-width:300px"></canvas>
                 </div>
             </div>
             <!-- CHARTS SECTION END -->
 
+            <!-- DISPLAY CURRENT VALUES SECTION -->
+            <div class="display-values">
+                <div id="inside_temperature_field" class="value-box" data-label="Inside temperature">°C</div>
+                <div id="outside_temperature_field" class="value-box" data-label="Outside temperature">°C</div>
+                <div id="inside_humidity_field" class="value-box" data-label="Inside humidity">%</div>
+                <div id="outside_humidity_field" class="value-box" data-label="Outside humidity">%</div>
+                <div id="moisture_sens1_field" class="value-box" data-label="Moisture sensor 1">[a.u.]</div>
+                <div id="moisture_sens2_field" class="value-box" data-label="Moisture sensor 2">[a.u.]</div>
+                <div id="moisture_sens3_field" class="value-box" data-label="Moisture sensor 3">[a.u.]</div>
+            </div>              
+            <!-- DISPLAY CURRENT VALUES SECTION END -->
+
             <!-- CONTROL SECTION -->
             <div class="control-section-grid">
                 <!-- Stage movement -->
-                <div class="bodytext" id="stage-movement">
-
+                <div class="control-section" id="stage-movement">
+                    <h2>Growlight stage position</h2>
+                    <input type="radio" id="position1" name="growlight_position" value="position1">
+                    <label for="position1">Position 1</label><br>
+                    <input type="radio" id="position2" name="growlight_position" value="position2">
+                    <label for="position2">Position 2</label><br>
+                    <input type="radio" id="position3" name="growlight_position" value="position3">
+                    <label for="position3">Position 3</label><br>
+                    <input type="radio" id="position3" name="growlight_position" value="position3">
+                    <label for="position4">Position 4</label><br>
+                    <input type="radio" id="position3" name="growlight_position" value="position3">
+                    <label for="position5">Position 5</label><br>
                 </div>
                 <!-- Growlight toggle -->
-                <div class="bodytext" id="growlight-toggle">
+                <div class="control-section" id="growlight-toggle">
+                    <h2>Manual growlight toggle</h2>
+                    <div class="switch-container">
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="growlights_toggle_all" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Toggle all</span>
+                        </div>
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="growlight1_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Growlight 1</span>
+                        </div>
+                      
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="growlight2_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Growlight 2</span>
+                        </div>
 
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="growlight3_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Growlight 3</span>
+                        </div>
+                    </div>
                 </div>
                 <!-- Fan toggle -->
-                <div class="bodytext" id="fan-toggle">
+                <div class="control-section" id="fan-toggle">
+                    <h2>Manual fan toggle</h2>
+                    <div class="switch-container">
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="fans_toggle_all" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Toggle all</span>
+                        </div>
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="fan1_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Fan 1</span>
+                        </div>
+                      
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="fan2_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Fan 2</span>
+                        </div>
 
+                        <div class="switch-wrapper">
+                          <label class="switch">
+                            <input type="checkbox" id="fan3_toggle" class="toggle-input">
+                            <span class="slider round"></span>
+                          </label>
+                          <span class="label-text">Fan 3</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--  CONTROL SECTION END -->
 
-            <!-- CONFIGURATION SECTION -->
+            <!-- CONFIGURATIONS SECTION -->
+
             <div class="configuration-section-grid">
-                <!-- Growlight toggle configuration -->
-                <div class="bodytext" id="growlight-toggle-config">
-
+              <span class="section-heading">Configurations</span>
+              <span class="placeholder"></span>
+              <span class="placeholder"></span>
+              <!-- Growlight toggle configuration -->
+              
+              <div class="config-numval" id="growlight-toggle-config">
+                <h2>Automatic light toggling</h2>
+                <div class="configuration-subsection-grid">
+                  <div class="config-group">
+                    <span class="numval round">GL1 on</span>
+                    <input type="number" class="numfield" id="gl1_on" />
+                  </div>
+                  <div class="config-group">
+                    <span class="numval round">GL1 off</span>
+                    <input type="number" class="numfield" id="gl1_off" />
+                  </div>
+                  <div class="config-group">
+                    <span class="numval round">GL2 on</span>
+                    <input type="number" class="numfield" id="gl2_on" />
+                  </div>
+                  <div class="config-group">
+                    <span class="numval round">GL2 off</span>
+                    <input type="number" class="numfield" id="gl2_off" />
+                  </div>
+                  <div class="config-group">
+                    <span class="numval round">GL3 on</span>
+                    <input type="number" class="numfield" id="gl3_on" />
+                  </div>
+                  <div class="config-group">
+                    <span class="numval round">GL3 off</span>
+                    <input type="number" class="numfield" id="gl3_off" />
+                  </div>
                 </div>
-                <!-- Fan toggle configuration -->
-                <div class="bodytext" id="fans-toggle-config">
-
+                <button class="placeholder" onclick="send_gltoggleconfig()">Send growlight toggle config</button>
+              </div>
+              
+              <!-- Fan toggle configuration -->
+              <h2>Automatic fan toggling</h2>
+              <div class="config-numval" id="fans-toggle-config">
+                <div class="config-group">
+                  <span class="numval round">Fan 1 on</span>
+                  <input type="number" class="numfield" id="fan1_on" />
                 </div>
+                <div class="config-group">
+                  <span class="numval round">Fan 1 off</span>
+                  <input type="number" class="numfield" id="fan1_off" />
+                </div>
+                <div class="config-group">
+                  <span class="numval round">Fan 2 on</span>
+                  <input type="number" class="numfield" id="fan2_on" />
+                </div>
+                <div class="config-group">
+                  <span class="numval round">Fan 2 off</span>
+                  <input type="number" class="numfield" id="fan2_off" />
+                </div>
+                <div class="config-group">
+                  <span class="numval round">Fan 3 on</span>
+                  <input type="number" class="numfield" id="fan3_on" />
+                </div>
+                <div class="config-group">
+                  <span class="numval round">Fan 3 off</span>
+                  <input type="number" class="numfield" id="fan3_off" />
+                </div>
+                <button onclick="send_fantoggleconfig()">Send fan toggle config</button>
+              </div>
             </div>
+            
+            
+            
             <!-- CONTENT END -->
         </main>
 

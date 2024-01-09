@@ -1,0 +1,295 @@
+/* GENERAL */
+.section-heading {
+  margin-top: 40px;
+  font-size: 28px;
+  font-family: "Courier New", sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.foot {
+  font-family: "Courier New", sans-serif;
+  font-size: 20px;
+  position: relative;
+  height:   30px;
+  text-align: center;   
+  color: #474646;
+  line-height: 20px;
+}
+/* NAVIGATION BAR */
+
+.navbar {
+    width: 100%;
+    height: 50px;
+    margin: 0;
+    padding: 10px 0px;
+    background-color: #FFF;
+    color: #000000;
+    border-bottom: 8px solid #782929;
+}
+
+.navtitle {
+    float: left;
+    height: 50px;
+    font-family: "Courier New", sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+    line-height: 50px;
+    padding-left: 20px;
+}
+
+.navheading {
+    position: fixed;
+    left: 65%;
+    height: 50px;
+    font-family: "Courier New", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.navdata {
+    justify-content: flex-end;
+    position: fixed;
+    left: 70%;
+    height: 50px;
+    font-family: "Courier New", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 20px;
+    padding-right: 20px;
+}
+
+.navauthor {
+    position: fixed;
+    left: 50%;
+    font-family: "Courier New", sans-serif;
+    font-size: 24px;
+    text-align: left;
+    font-weight: light;
+    border-radius: 5px;
+    display:inline;
+}
+
+.fixed-top {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+/* DISPLAYED VALUES SECTION */
+
+.display-values {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 24px;
+}
+
+.value-box {
+    flex: 1 1 100px; /* Adjust width as needed */
+    border: 1px solid #2d2c7f00;
+    margin: 10px;
+    padding: 30px;
+    position: relative;
+    font-family: "Courier New", sans-serif;
+}
+
+.value-box::before {
+    content: attr(data-label); /* Display the text content */
+    position: absolute;
+    top: -30px;
+    left: 0px; /* Adjust for text alignment */
+    font-weight: bold;
+    color: #333;
+    font-family: "Courier New", sans-serif;
+}
+
+.value-box::after {
+    left: auto;
+    right: -15px; /* Adjust for text alignment */
+    font-family: "Courier New", sans-serif;
+}
+
+/* CONTROL SECTION - GENERAL */
+.control-section-grid {
+    display: flex;
+    flex-direction: row;
+    height: 300px;
+    font-family: "Courier New", sans-serif;
+}
+
+.control-section {
+    flex: 1;
+    border: 1px solid #bf000000;
+    box-sizing: border-box;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.section h2 {
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+/* CONTROL SECTION - STAGE POSITION */
+/* Hide default radio button appearance */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px; /* Adjust width and height */
+    height: 20px; /* to set the desired size */
+    border-radius: 50%; /* Makes it a circle */
+    border: 2px solid #ccc; /* Border style */
+    outline: none; /* Remove focus border */
+    cursor: pointer;
+    margin-right: 5px; /* Add spacing between radio and label */
+    padding: 15px;
+    vertical-align: middle;
+}
+/* Style checked radio button */
+input[type="radio"]:checked {
+    background-color: #2196F3; /* Change background color when checked */
+}
+/* Style label for radio buttons */
+label {
+    cursor: pointer;
+}
+  
+
+/* CONTROL SECTION - GROWLIGHT TOGGLE */
+.switch-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch-wrapper {
+  margin-bottom: 20px; /* Adjust spacing between switches */
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  width: 50px; /* Adjust the width of the switch as needed */
+  height: 30px; /* Adjust the height of the switch as needed */
+  background-color: #ccc;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: .4s;
+  border-radius: 30px; /* Adjust border-radius for rounded edges */
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 30px; /* Adjust border-radius for rounded edges */
+}
+
+/* Styles for the toggle input when checked */
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+/* Move the slider to the right when checked */
+input:checked + .slider:before {
+  transform: translateX(20px); /* Adjust the distance the knob moves */
+}
+
+/* Additional styles to enhance the appearance */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px; /* Adjust the height of the knob */
+  width: 26px; /* Adjust the width of the knob */
+  left: 2px; /* Adjust the left position of the knob */
+  bottom: 2px; /* Adjust the bottom position of the knob */
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0px 2px 5px rgba(33, 33, 33, 0.098);
+}
+
+/* Style the text labels */
+.label-text {
+  color: #000;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin-left: 40px; /* Adjust the margin as needed */
+  line-height: 30px; /* Match the line-height with switch height */
+}
+
+/* CONFIGURATION SECTION */
+.config-group {
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  font-family: "Courier New", sans-serif;
+}
+
+.configuration-section-grid {
+  display: grid;
+  flex-direction: row;
+  grid-template-columns: auto auto;
+  width: 50%;
+  font-family: "Courier New", sans-serif;
+}
+
+.configuration-subsection-grid {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  font-family: "Courier New", sans-serif;
+}
+
+.config-numval {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.numfield {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 100px; /* Adjust the width as needed */
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.numval {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+  flex-basis: 20%; /* Each label takes up 20% of the space */
+}
+
+button {
+  margin-top: 10px;
+}
