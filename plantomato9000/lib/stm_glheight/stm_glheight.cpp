@@ -2,25 +2,8 @@
 
 #include "stm_glheight.h"
 
-// float stm_glheight_upper_short = 1000;    // todo: check this value
-// float stm_glheight_lower_short = 1000;    // todo: check this value
-// float stm_glheight_short_treshold = 50 ;  // todo: check on this treshold
-// bool stm_glheight_short_checkmark = false;
 int stm_glheight_motor_delay = 200;      //µs
 bool stm_glheight_motor_running = false;
-
-
-/*
-bool stm_glheight_islimit_reached(){
-    // did growlight reach its minimum or maximum height?
-    stm_glheight_upper_short = analogRead(APIN_STM_CH_U);
-    stm_glheight_lower_short = analogRead(APIN_STM_CH_L);
-    if (stm_glheight_upper_short < stm_glheight_short_treshold || stm_glheight_lower_short < stm_glheight_short_treshold){
-        stm_glheight_short_checkmark = true;
-    } else {stm_glheight_short_checkmark = false;}
-    return stm_glheight_short_checkmark;
-}
-*/
 
 void stm_stage_initialization(){
     digitalWrite(DPIN_STM_DIR,HIGH); // todo check if HIGH relates to up-movement
@@ -47,9 +30,6 @@ void stm_stage_current_position(){
     }
     else if (digitalRead(DPIN_LB_4) == LOW){
         stage_position = 4;
-    }
-    else if (digitalRead(DPIN_LB_5) == LOW){
-        stage_position = 5;
     }
     else {
         stage_position = -1;
@@ -102,14 +82,6 @@ void stm_glheight_move(String direction, int position){
         if (stage_position == position){
             stm_glheight_stop();
         }
-/*
-        // growlight reached maximum
-        if (stm_glheight_islimit_reached() == true){ // todo: check case: if there is a contact, i.e. growlight is at a maximum position, does it break instantly?
-            stm_glheight_stop();
-            break;
-        }
-*/
-
     }
 }
 

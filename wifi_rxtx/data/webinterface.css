@@ -150,15 +150,16 @@ input[type="radio"] {
     padding: 15px;
     vertical-align: middle;
 }
+
 /* Style checked radio button */
 input[type="radio"]:checked {
     background-color: #2196F3; /* Change background color when checked */
 }
+
 /* Style label for radio buttons */
 label {
     cursor: pointer;
 }
-  
 
 /* CONTROL SECTION - GROWLIGHT TOGGLE */
 .switch-container {
@@ -251,26 +252,20 @@ input:checked + .slider:before {
 }
 
 .configuration-section-grid {
-  display: grid;
-  flex-direction: row;
-  grid-template-columns: auto auto;
   width: 50%;
-  font-family: "Courier New", sans-serif;
-}
-
-.configuration-subsection-grid {
-  display: flex;
-  flex-direction: column;
-  height: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  grid-gap: 20px; /* Adjust the gap between columns */
   font-family: "Courier New", sans-serif;
 }
 
 .config-numval {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+  align-items: left;
   flex-direction: column;
+  margin-bottom: 20px;
+  font-size: 24px;
 }
 
 .numfield {
@@ -292,4 +287,6 @@ input:checked + .slider:before {
 
 button {
   margin-top: 10px;
+  font-size: 24px;
+  font-family: "Courier New", sans-serif;
 }

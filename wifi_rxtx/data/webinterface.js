@@ -1,6 +1,6 @@
 // INITIALIZATION
 // entry point to websocket interface
-var gateway = 'ws://${window.location.hostname}/ws';
+var socket = new WebSocket("ws://" + window.location.hostname + ":81/");
 
 // add event listener: opened connection
 socket.addEventListener('open', function (event){
@@ -55,6 +55,7 @@ function display_value(rx_message) {
 // RADIO BUTTONS - Growlight position selection
 // selects all radio buttons with common name atrribute
 const radioButtons_growlight_position = document.querySelectorAll('input[name="growlight_position"]');
+const numericValueSpan = document.getElementById('numeric-value');
 // add change event listener to each radio button
 radioButtons_growlight_position.forEach(button => {
     button.addEventListener('change', function() {
@@ -66,16 +67,16 @@ radioButtons_growlight_position.forEach(button => {
       "position2": 2,
       "position3": 3,
       "position4": 4,
-      "position5": 5
     };
     var stage_position_value = positionValues[selectedOption] || 0;
+
     const data = {
         "stage_position": stage_position_value
     };
     // convert to JSON string
     const jsonString = JSON.stringify(data);
     // send JSON string over websocket
-    socket.send(jsonString);    
+    socket.send(jsonString);
     });
 });
 
@@ -88,12 +89,10 @@ function addGrowlightToggleListener(growlightId) {
     "growlight1_toggle": 1,
     "growlight2_toggle": 2,
     "growlight3_toggle": 3,
-    "growlight4_toggle": 4,
-    "growlight5_toggle": 5,
   }
-  var growlight_number = growlightNumber[growlight_toggle] || 0;
+  var growlight_number = growlightNumber[growlightId] || 0;
   // add event listener 'change'
-  const isSwitchOn = "";
+  var isSwitchOn = "";
   growlight_toggle.addEventListener('change', function() {
       if (growlight_toggle.checked){
         isSwitchOn = "on"
@@ -108,15 +107,26 @@ function addGrowlightToggleListener(growlightId) {
       socket.send(jsonString);
   });
 }
+
 // Fans
 function addFanToggleListener(fanId) {
   // create object on element id
   const fan_toggle = document.getElementById(fanId);
+  const fanNumber = {
+    "fan1_toggle": 1,
+    "fan2_toggle": 2,
+    "fan3_toggle": 3,
+  }
+  var fan_number = fanNumber[fanId] || 0;
   // add event listener 'change'
+  var isSwitchOn = "";
   fan_toggle.addEventListener('change', function() {
-      const isSwitchOn = fan_toggle.checked;
+      if (fan_toggle.checked){
+        isSwitchOn = "on"
+      } else {isSwitchOn = "off"}
       const data = {
-          "fan": isSwitchOn //! write key-/values
+          "fan": fan_number,
+          "state": isSwitchOn
       };
       // convert to JSON string
       const jsonString = JSON.stringify(data);
@@ -124,13 +134,14 @@ function addFanToggleListener(fanId) {
       socket.send(jsonString);
   });
 }
+
 // Add event listeners for each growlight and fan toggle switch
 addGrowlightToggleListener("growlight1_toggle");
 addGrowlightToggleListener("growlight2_toggle");
 addGrowlightToggleListener("growlight3_toggle");
-addToggleListener("fan1_toggle");
-addToggleListener("fan2_toggle");
-addToggleListener("fan3_toggle");
+addFanToggleListener("fan1_toggle");
+addFanToggleListener("fan2_toggle");
+addFanToggleListener("fan3_toggle");
 
 // Main switches
 

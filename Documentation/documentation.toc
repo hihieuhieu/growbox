@@ -1,0 +1,15 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{}%
+\contentsline {section}{\numberline {2}Materials and Methods}{3}{}%
+\contentsline {subsection}{\numberline {2.1}Electronic hardware components}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}Control units}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.2}Sensors}{3}{}%
+\contentsline {subsubsection}{\numberline {2.1.3}Actors}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Software architecture}{3}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Excurse: talking to control units using PlatformIO}{3}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Communication protocols}{3}{}%
+\contentsline {subsubsection}{\numberline {2.2.3}WebSockets}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Mechanical parts}{3}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Material list}{3}{}%
+\contentsline {subsubsection}{\numberline {2.3.2}Dimensions}{3}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Height control}{3}{}%
+\contentsline {subsubsection}{\numberline {2.3.4}LittleFS}{4}{}%

@@ -4,14 +4,13 @@
 
 float csms_level(int sensor){
     switch (sensor){
-    case 1:
-        analogRead(APIN_CSMS_1);
-        break;
-    case 2:
-        analogRead(APIN_CSMS_2);
-    case 3:
-        analogRead(APIN_CSMS_3);
-    default:
-        break;
-    }
+        case 1:
+            return analogRead(APIN_CSMS_1);
+        case 2:
+            return analogRead(APIN_CSMS_2);
+        case 3:
+            return analogRead(APIN_CSMS_3);
+        default:
+            return -99999;
+        }
 }

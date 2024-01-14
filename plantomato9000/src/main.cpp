@@ -42,8 +42,8 @@ void loop() {
   if (Serial.available() > 0){
     String rx_string = Serial.readString();
 
-    // move stage to position {1, 2, 3, 4, 5}
-    // received string: "stage_to_{1,2,3,4,5}"
+    // move stage to position {1, 2, 3, 4}
+    // received string: "stage_to_{1,2,3,4}"
     if (rx_string.indexOf("stage_to_")){
       int pos = rx_string.substring(rx_string.lastIndexOf('_') + 1).toInt();
       if (pos >= 1 && pos <= 5){
