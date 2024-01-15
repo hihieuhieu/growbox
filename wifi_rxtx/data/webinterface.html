@@ -157,30 +157,31 @@
                 <div class="configuration-subsection-grid">
                   <div class="config-group">
                     <span class="numval round">GL1 on</span>
-                    <input type="number" class="numfield" id="gl1_on" />
+                    <input type="time" id="gl1_on" name="gl1_on" min="00:00" max="23:59" value="00:00" required />
                   </div>
                   <div class="config-group">
                     <span class="numval round">GL1 off</span>
-                    <input type="number" class="numfield" id="gl1_off" />
+                    <input type="time" id="gl1_off" name="gl1_off" min="00:00" max="23:59" value="00:00" required />
                   </div>
                   <div class="config-group">
                     <span class="numval round">GL2 on</span>
-                    <input type="number" class="numfield" id="gl2_on" />
+                    <input type="time" id="gl2_on" name="gl2_on" min="00:00" max="23:59" value="00:00" required />
                   </div>
                   <div class="config-group">
                     <span class="numval round">GL2 off</span>
-                    <input type="number" class="numfield" id="gl2_off" />
+                    <input type="time" id="gl2_off" name="gl2_off" min="00:00" max="23:59" value="00:00" required />
                   </div>
                   <div class="config-group">
                     <span class="numval round">GL3 on</span>
-                    <input type="number" class="numfield" id="gl3_on" />
+                    <input type="time" id="gl3_on" name="gl3_on" min="00:00" max="23:59" value="00:00" required />
                   </div>
                   <div class="config-group">
                     <span class="numval round">GL3 off</span>
-                    <input type="number" class="numfield" id="gl3_off" />
-                  </div>
+                    <input type="time" id="gl3_off" name="gl3_off" min="00:00" max="23:59" value="00:00" required />
+                  </div>                  
                 </div>
-                <button onclick="send_gltoggleconfig()">Send growlight toggle config</button>
+                <!-- <button onclick="send_gltoggleconfig()">Send growlight toggle config</button> -->
+                <button id="gl_config_submit">Submit</button>
               </div>
               
               <!-- Fan toggle configuration -->
@@ -188,29 +189,30 @@
                 <h2>Automatic fan toggling</h2>
                 <div class="config-group">
                   <span class="numval round">Fan 1 on</span>
-                  <input type="text" class="numfield" id="fan1_on" placeholder="HH:mm" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" />
+                  <input type="time" id="fan1_on" name="fan1_off" min="00:00" max="23:59" value="00:00" required />
                 </div>
                 <div class="config-group">
                   <span class="numval round">Fan 1 off</span>
-                  <input type="number" class="numfield" id="fan1_off" />
+                  <input type="time" id="fan1_off" name="fan1_off" min="00:00" max="23:59" value="00:00" required />
                 </div>
                 <div class="config-group">
                   <span class="numval round">Fan 2 on</span>
-                  <input type="number" class="numfield" id="fan2_on" />
+                  <input type="time" id="fan2_on" name="fan2_off" min="00:00" max="23:59" value="00:00" required />
                 </div>
                 <div class="config-group">
                   <span class="numval round">Fan 2 off</span>
-                  <input type="number" class="numfield" id="fan2_off" />
+                  <input type="time" id="fan2_off" name="fan2_off" min="00:00" max="23:59" value="00:00" required />
                 </div>
                 <div class="config-group">
                   <span class="numval round">Fan 3 on</span>
-                  <input type="number" class="numfield" id="fan3_on" />
+                  <input type="time" id="fan3_on" name="fan3_on" min="00:00" max="23:59" value="00:00" required />
                 </div>
                 <div class="config-group">
                   <span class="numval round">Fan 3 off</span>
-                  <input type="number" class="numfield" id="fan3_off" />
+                  <input type="time" id="fan3_off" name="fan3_off" min="00:00" max="23:59" value="00:00" required />
                 </div>
-                <button onclick="send_fantoggleconfig()">Send fan toggle config</button>
+                <!-- <button onclick="send_fantoggleconfig()">Send fan toggle config</button> -->
+                <button id="fan_config_submit">Submit</button>
               </div>
             </div>
             <!-- CONTENT END -->

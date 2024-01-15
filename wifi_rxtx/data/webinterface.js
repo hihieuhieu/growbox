@@ -149,37 +149,119 @@ addFanToggleListener("fan3_toggle");
 
 
 // CONFIGURATIONS
-function send_gltoggleconfig(component) {
-    const gl1_on = document.getElementById('gl1_on').value;
-    const gl1_off = document.getElementById('gl1_off').value;
-    const gl2_on = document.getElementById('gl2_on').value;
-    const gl2_off = document.getElementById('gl2_off').value;
-    const gl3_on = document.getElementById('gl3_on').value;
-    const gl3_off = document.getElementById('gl3_off').value;
-    // Create a JSON object with the numeric value
-    const data = {
-    value: parseFloat(numericValue) //! write key-/values
-    };
-    // Convert JSON object to string before sending
-    const jsonData = JSON.stringify(data);
-    // Send the data over the WebSocket connection
-    socket.send(jsonData);
-};
+// function send_gltoggleconfig(component) {
+//     const gl1_on = document.getElementById('gl1_on').value;
+//     const gl1_off = document.getElementById('gl1_off').value;
+//     const gl2_on = document.getElementById('gl2_on').value;
+//     const gl2_off = document.getElementById('gl2_off').value;
+//     const gl3_on = document.getElementById('gl3_on').value;
+//     const gl3_off = document.getElementById('gl3_off').value;
+//     // Create a JSON object with the numeric value
+//     const data = {
+//     value: parseFloat(numericValue) //! write key-/values
+//     };
+//     // Convert JSON object to string before sending
+//     const jsonData = JSON.stringify(data);
+//     // Send the data over the WebSocket connection
+//     socket.send(jsonData);
+// };
 
-function send_fantoggleconfig(component) {
-    const fan1_on = document.getElementById('fan1_on').value;
-    const fan1_off = document.getElementById('fan1_off').value;
-    const fan2_on = document.getElementById('fan2_on').value;
-    const fan2_off = document.getElementById('fan2_off').value;
-    const fan3_on = document.getElementById('fan3_on').value;
-    const fan3_off = document.getElementById('fan3_off').value;
-    // Create a JSON object with the numeric value
-    const data = {
-    value: parseFloat(numericValue) //! write key-/values
-    };
-    // Convert JSON object to string before sending
-    const jsonData = JSON.stringify(data);
-    // Send the data over the WebSocket connection
-    socket.send(jsonData);
-};
+// function send_fantoggleconfig(component) {
+//     const fan1_on = document.getElementById('fan1_on').value;
+//     const fan1_off = document.getElementById('fan1_off').value;
+//     const fan2_on = document.getElementById('fan2_on').value;
+//     const fan2_off = document.getElementById('fan2_off').value;
+//     const fan3_on = document.getElementById('fan3_on').value;
+//     const fan3_off = document.getElementById('fan3_off').value;
+//     // Create a JSON object with the numeric value
+//     const data = {
+//     value: parseFloat(numericValue) //! write key-/values
+//     };
+//     // Convert JSON object to string before sending
+//     const jsonData = JSON.stringify(data);
+//     // Send the data over the WebSocket connection
+//     socket.send(jsonData);
+// };
 
+document.getElementById('gl_config_submit').addEventListener('click', function() {
+  // Create an array to store key-value pairs for each fan
+  var glData = [];
+
+  // Loop through each gl input
+  for (var i = 1; i <= 3; i++) {
+    // Get the on and off inputs for each gl
+    var onInput = document.getElementById('gl' + i + '_on');
+    var offInput = document.getElementById('gl' + i + '_off');
+
+    // Extract gl number from the id
+    var glNumber = i;
+
+    // Extract gl state (on or off) from the id
+    var glState = onInput.id.includes('on') ? 'on' : 'off';
+
+    // Extract hour and minute values
+    var onHour = onInput.value.split(':')[0];
+    var onMinute = onInput.value.split(':')[1];
+    var offHour = offInput.value.split(':')[0];
+    var offMinute = offInput.value.split(':')[1];
+
+    // Push the key-value pairs for each gl to the array
+    glData.push({
+      'gl_number': glNumber,
+      'gl_state': glState,
+      'on': {
+        'hour': onHour,
+        'minute': onMinute
+      },
+      'off': {
+        'hour': offHour,
+        'minute': offMinute
+      }
+    });
+  }
+
+  // Output the collected data to the console (you can modify this part as needed)
+  console.log(glData);
+});
+
+
+document.getElementById('fan_config_submit').addEventListener('click', function() {
+  // Create an array to store key-value pairs for each fan
+  var fanData = [];
+
+  // Loop through each fan input
+  for (var i = 1; i <= 3; i++) {
+    // Get the on and off inputs for each fan
+    var onInput = document.getElementById('fan' + i + '_on');
+    var offInput = document.getElementById('fan' + i + '_off');
+
+    // Extract fan number from the id
+    var fanNumber = i;
+
+    // Extract fan state (on or off) from the id
+    var fanState = onInput.id.includes('on') ? 'on' : 'off';
+
+    // Extract hour and minute values
+    var onHour = onInput.value.split(':')[0];
+    var onMinute = onInput.value.split(':')[1];
+    var offHour = offInput.value.split(':')[0];
+    var offMinute = offInput.value.split(':')[1];
+
+    // Push the key-value pairs for each fan to the array
+    fanData.push({
+      'fan_number': fanNumber,
+      'fan_state': fanState,
+      'on': {
+        'hour': onHour,
+        'minute': onMinute
+      },
+      'off': {
+        'hour': offHour,
+        'minute': offMinute
+      }
+    });
+  }
+
+  // Output the collected data to the console (you can modify this part as needed)
+  console.log(fanData);
+});

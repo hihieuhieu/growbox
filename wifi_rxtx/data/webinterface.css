@@ -289,4 +289,6 @@ button {
   margin-top: 10px;
   font-size: 24px;
   font-family: "Courier New", sans-serif;
+  width: 300px;
+  margin-left: 15%;
 }
