@@ -18,7 +18,7 @@ void stm_stage_initialization(){
     }
 }
 
-void stm_stage_current_position(){
+int stm_stage_current_position(){
     if (digitalRead(DPIN_LB_1) == LOW){
         stage_position = 1;
     }
@@ -34,6 +34,7 @@ void stm_stage_current_position(){
     else {
         stage_position = -1;
     }
+    return stage_position;
 }
 
 // toggle motor enbl
@@ -59,27 +60,31 @@ void stm_glheight_speed(String speed){
 /*
 Move stage up or down
 
-Parameters: 
+Parameters:
     direction: {"up", "down"}
 */
 void stm_glheight_move(String direction, int position){
     // if direction was set to "up", pin_value will get assigned HIGH. else LOW. -1 as placeholder value for any other condition
     int pin_value = (direction == "up") ? HIGH : ((direction == "down") ? LOW : -1); // todo : set HIGH or LOW depending on actual movement
-    digitalWrite(DPIN_STM_DIR, pin_value); 
+    digitalWrite(DPIN_STM_DIR, pin_value);
     stm_glheight_motor_running = true;
 
     while (stm_glheight_motor_running){
         _stm_glheight_run_motor();
 
         // if user query: Stop motor
-        if (Serial.available() > 0 && Serial.read() == 'S'){ // todo: rewrite such that it fits with RXTX with ESP8266
-            stm_glheight_stop();
-            break;
-        }
+        // if (Serial.available() > 0 && Serial.read() == 'S'){ // todo: rewrite such that it fits with RXTX with ESP8266
+        //     stm_glheight_stop();
+        //     break;
+        // }
 
-        stm_stage_current_position();
-
-        if (stage_position == position){
+        int current_position = stm_stage_current_position();
+        Serial.print("Desired position: ");
+        Serial.println(position);
+        delay(100);
+        Serial.print("Current position: ");
+        Serial.println(current_position);
+        if (current_position == position){
             stm_glheight_stop();
         }
     }
@@ -90,9 +95,11 @@ Start motor movement
 */
 void _stm_glheight_run_motor(){
     digitalWrite(DPIN_STM_PUL, HIGH);
-    delayMicroseconds(stm_glheight_motor_delay);
+    delayMicroseconds(500);
+    // delayMicroseconds(stm_glheight_motor_delay);
+    delayMicroseconds(500);
     digitalWrite(DPIN_STM_PUL, LOW);
-    delayMicroseconds(stm_glheight_motor_delay);
+    // delayMicroseconds(stm_glheight_motor_delay);
 }
 
 /*

@@ -5,11 +5,11 @@
         <title>
             PLANTOMATO 9000
         </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="webinterface.css">
     </head>
 
-    <body style="background-color: #98bdbd" onload="process()">
+    <body style="background-color: #5c8db6" onload="process()">
 
         <header>
             <div class="navbar fixed-top">
@@ -45,15 +45,17 @@
 
             <!-- DISPLAY CURRENT VALUES SECTION -->
             <div class="display-values">
-                <div id="inside_temperature_field" class="value-box" data-label="Inside temperature">°C</div>
-                <div id="outside_temperature_field" class="value-box" data-label="Outside temperature">°C</div>
-                <div id="inside_humidity_field" class="value-box" data-label="Inside humidity">%</div>
-                <div id="outside_humidity_field" class="value-box" data-label="Outside humidity">%</div>
-                <div id="moisture_sens1_field" class="value-box" data-label="Moisture sensor 1">[a.u.]</div>
-                <div id="moisture_sens2_field" class="value-box" data-label="Moisture sensor 2">[a.u.]</div>
-                <div id="moisture_sens3_field" class="value-box" data-label="Moisture sensor 3">[a.u.]</div>
-            </div>              
+                <div id="inside_temperature_field" class="value-box" data-label="Inside temperature">measuring...</div>
+                <div id="outside_temperature_field" class="value-box" data-label="Outside temperature">measuring...</div>
+                <div id="inside_humidity_field" class="value-box" data-label="Inside humidity">measuring...</div>
+                <div id="outside_humidity_field" class="value-box" data-label="Outside humidity">measuring...</div>
+                <div id="moisture_sens1_field" class="value-box" data-label="Moisture sensor 1">measuring...</div>
+                <div id="moisture_sens2_field" class="value-box" data-label="Moisture sensor 2">measuring...</div>
+                <div id="moisture_sens3_field" class="value-box" data-label="Moisture sensor 3">measuring...</div>
+            </div>
             <!-- DISPLAY CURRENT VALUES SECTION END -->
+
+            <button id="sensor_data">Fetch sensor data</button>
 
             <!-- CONTROL SECTION -->
             <div class="control-section-grid">
@@ -75,19 +77,12 @@
                     <div class="switch-container">
                         <div class="switch-wrapper">
                           <label class="switch">
-                            <input type="checkbox" id="growlights_toggle_all" class="toggle-input">
-                            <span class="slider round"></span>
-                          </label>
-                          <span class="label-text">Toggle all</span>
-                        </div>
-                        <div class="switch-wrapper">
-                          <label class="switch">
                             <input type="checkbox" id="growlight1_toggle" class="toggle-input">
                             <span class="slider round"></span>
                           </label>
                           <span class="label-text">Growlight 1</span>
                         </div>
-                      
+
                         <div class="switch-wrapper">
                           <label class="switch">
                             <input type="checkbox" id="growlight2_toggle" class="toggle-input">
@@ -111,33 +106,10 @@
                     <div class="switch-container">
                         <div class="switch-wrapper">
                           <label class="switch">
-                            <input type="checkbox" id="fans_toggle_all" class="toggle-input">
+                            <input type="checkbox" id="fan_toggle" class="toggle-input">
                             <span class="slider round"></span>
                           </label>
-                          <span class="label-text">Toggle all</span>
-                        </div>
-                        <div class="switch-wrapper">
-                          <label class="switch">
-                            <input type="checkbox" id="fan1_toggle" class="toggle-input">
-                            <span class="slider round"></span>
-                          </label>
-                          <span class="label-text">Fan 1</span>
-                        </div>
-                      
-                        <div class="switch-wrapper">
-                          <label class="switch">
-                            <input type="checkbox" id="fan2_toggle" class="toggle-input">
-                            <span class="slider round"></span>
-                          </label>
-                          <span class="label-text">Fan 2</span>
-                        </div>
-
-                        <div class="switch-wrapper">
-                          <label class="switch">
-                            <input type="checkbox" id="fan3_toggle" class="toggle-input">
-                            <span class="slider round"></span>
-                          </label>
-                          <span class="label-text">Fan 3</span>
+                          <span class="label-text">Fan</span>
                         </div>
                     </div>
                 </div>
@@ -178,48 +150,37 @@
                   <div class="config-group">
                     <span class="numval round">GL3 off</span>
                     <input type="time" id="gl3_off" name="gl3_off" min="00:00" max="23:59" value="00:00" required />
-                  </div>                  
+                  </div>
                 </div>
-                <!-- <button onclick="send_gltoggleconfig()">Send growlight toggle config</button> -->
                 <button id="gl_config_submit">Submit</button>
               </div>
-              
+
               <!-- Fan toggle configuration -->
               <div class="config-numval" id="fans-toggle-config">
                 <h2>Automatic fan toggling</h2>
                 <div class="config-group">
-                  <span class="numval round">Fan 1 on</span>
-                  <input type="time" id="fan1_on" name="fan1_off" min="00:00" max="23:59" value="00:00" required />
+                  <span class="numval round">Duration: Fan ON</span>
+                  <input type="number" id="fan_on" name="fan_off" min="0" max="5000" value="10" required />
                 </div>
                 <div class="config-group">
-                  <span class="numval round">Fan 1 off</span>
-                  <input type="time" id="fan1_off" name="fan1_off" min="00:00" max="23:59" value="00:00" required />
+                  <span class="numval round">Duration: Fan OFF</span>
+                  <input type="number" id="fan_off" name="fan_off" min="0" max="5000" value="20" required />
                 </div>
-                <div class="config-group">
-                  <span class="numval round">Fan 2 on</span>
-                  <input type="time" id="fan2_on" name="fan2_off" min="00:00" max="23:59" value="00:00" required />
+                <div class="switch-wrapper">
+                  <label class="switch">
+                    <input type="checkbox" id="fan_onoff_toggle" class="toggle-input">
+                    <span class="slider round"></span>
+                  </label>
+                  <span class="label-text">Fan automatic ON/OFF</span>
                 </div>
-                <div class="config-group">
-                  <span class="numval round">Fan 2 off</span>
-                  <input type="time" id="fan2_off" name="fan2_off" min="00:00" max="23:59" value="00:00" required />
-                </div>
-                <div class="config-group">
-                  <span class="numval round">Fan 3 on</span>
-                  <input type="time" id="fan3_on" name="fan3_on" min="00:00" max="23:59" value="00:00" required />
-                </div>
-                <div class="config-group">
-                  <span class="numval round">Fan 3 off</span>
-                  <input type="time" id="fan3_off" name="fan3_off" min="00:00" max="23:59" value="00:00" required />
-                </div>
-                <!-- <button onclick="send_fantoggleconfig()">Send fan toggle config</button> -->
-                <button id="fan_config_submit">Submit</button>
+                <button id="fan_onoff_config_submit">Submit</button>
               </div>
             </div>
             <!-- CONTENT END -->
         </main>
-
-        <footer div class="foot" id = "temp" >PLANTOMATO 9000 DASHBOARD by Hieu Philip Hoang, 2024</div></footer>
-        <script src="webinterface.js" defer></script>
-        <!-- <script src="chart.js" defer></script> -->
     </body>
+
+    <footer div class="foot" id = "temp" >PLANTOMATO 9000 DASHBOARD by Hieu Philip Hoang, 2024</div></footer>
+    <script src="webinterface.js" defer></script>
+    <!-- <script src="chart.js" defer></script> -->
 </html>

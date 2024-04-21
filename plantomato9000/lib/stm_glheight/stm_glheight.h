@@ -20,6 +20,6 @@ void stm_glheight_speed(String);
 void _stm_glheight_run_motor();
 void stm_glheight_move(String, int);
 void stm_glheight_stop();
-void stm_stage_current_position();
+int stm_stage_current_position();
 
 #endif

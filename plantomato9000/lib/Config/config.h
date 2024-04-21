@@ -25,23 +25,23 @@ sets pinModes.
 
 
 // Step motor pins
-#define DPIN_STM_ENBL 8           //! change for mega. enable
-#define DPIN_STM_DIR 9            //! change for mega. direction
-#define DPIN_STM_PUL 10           //! change for mega. pulse
+#define DPIN_STM_ENBL 99
+#define DPIN_STM_DIR 99
+#define DPIN_STM_PUL 99
 extern int stm_glheight_motor_delay;        // motor delay. higher --> slower rotation, µs
 extern bool stm_glheight_motor_running;     // is motor running?
 
 // Light barriers
-#define DPIN_LB_1 6             //! change for mega.
-#define DPIN_LB_2 7             //! change for mega.
+#define DPIN_LB_1 99
+#define DPIN_LB_2 99
 #define DPIN_LB_3 99
 #define DPIN_LB_4 99
 extern int stage_position;
 
 // Relais
-#define DPIN_REL_GL1 23        // growlight
-#define DPIN_REL_GL2 25        // growlight
-#define DPIN_REL_GLX 27        // the cheap growlight
+#define DPIN_REL_GL1 26        // growlight
+#define DPIN_REL_GL2 27        // growlight
+#define DPIN_REL_GLX 28        // the cheap growlight
 #define DPIN_REL_FAN1 29       // fan1
 #define DPIN_REL_FAN2 31       // fan2
 #define DPIN_REL_FAN3 33       // fan3
@@ -62,8 +62,8 @@ extern int rel_fan3_off;
 
 
 // ESP8266 Serial connection
-#define RX_FROM_ESP8266 99
-#define TX_TO_ESP8266 99
+// #define RX_FROM_ESP8266 99
+// #define TX_TO_ESP8266 99
 
 // Water pump
 // ...

@@ -1,7 +1,11 @@
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <config.h>
 
 #include <stdio.h>
+
+#include <SPI.h>
+#include <RTClib.h>
 
 #include "dht11.h"
 #include "stm_glheight.h"
@@ -13,179 +17,110 @@
 DHT dht_inside(DPIN_DHT11_INSIDE, DHTTYPE);
 DHT dht_outside(DPIN_DHT11_OUTSIDE, DHTTYPE);
 
+DynamicJsonDocument doc(1024);
+
+int gl1_on = 8*60;
+int gl2_on = 11*60;
+int  gl3_on = 18*60;
+int  gl1_off = 20*60;
+int  gl2_off = 16*60;
+int  gl3_off = 20*60;
+
+int fan_on = 10; //mins
+int fan_off = 20;
+
+int time_now = 1*60+39; //! init every time after reuploading this code to current time (hour*60+minute)
+unsigned long previousMillis = 0;
+const long interval = 60000; // once per min
+
+
 void initialize_pins();
-// void initialize_values();
+void act_stage_position();
+void act_toggle_growlight();
+void act_toggle_fan();
+void send_dht_csms_data();
+void update_growlight_toggle_times();
+void update_fan_toggle_interval();
+void auto_toggle_growlight();
+void auto_toggle_fan();
 
 void setup() {
   // initialize required pins as output
+  Serial.begin(9600);
+  Serial1.begin(9600);
   initialize_pins();
+  Serial.println("Pins initialized.");
   // initialize stage position
-  stm_stage_initialization();
+  // stm_stage_initialization();
   // initialize DHT11 sensors
   dht11_initialize(dht_inside);
   dht11_initialize(dht_outside);
-
-  Serial.begin(9600);
+  Serial.println("I AM READY!!!!!!");
 }
 
 void loop() {
-  /*
-  Run continuously
-  */
-  current_time();
-  rel_toggle_automatically();
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    time_now = time_now+1;
 
-
-  /*
-  User inputs
-  */
-  if (Serial.available() > 0){
-    String rx_string = Serial.readString();
-
-    // move stage to position {1, 2, 3, 4}
-    // received string: "stage_to_{1,2,3,4}"
-    if (rx_string.indexOf("stage_to_")){
-      int pos = rx_string.substring(rx_string.lastIndexOf('_') + 1).toInt();
-      if (pos >= 1 && pos <= 5){
-        rel_enbl_stm("on");
-        stm_glheight_toggle("on");
-        delay(500);
-        if (stage_position < pos){
-          stm_glheight_move("up", pos);
-        }
-        else if (stage_position > pos){
-          stm_glheight_move("down", pos);
-        }
-        rel_enbl_stm("off");
-        stm_glheight_toggle("off");
-      } else {printf("Not a valid position.");}
+    if (time_now > 24*60){
+      time_now = 0;
     }
+  Serial.println(time_now);
+  }
 
-    // set motor speed {slow, medium, fast}
-    // received string: "set_stage_speed_{slow, medium, fast}"
-    else if (rx_string.indexOf("set_stage_speed_")){
-      String speed = rx_string.substring(rx_string.lastIndexOf('_') + 1);
-      stm_glheight_speed(speed);
+
+  if (Serial1.available() > 0){
+    String rx_string = Serial1.readStringUntil('\n');
+    Serial.println("Received JSON string: " + rx_string);
+
+    DeserializationError error = deserializeJson(doc, rx_string);
+
+    if (error){
+      Serial.print("Error parsing JSON: ");
+      Serial.println(error.c_str());
     }
-    
-    // update growlight toggle hours
-    // received string: "update_gl_toggle_{int}_{int}_{int}_{int}_{int}_{int}"
-    // int ∈ ℕ∈[0,24]
-    else if (rx_string.indexOf("update_gl_toggle_")){
-      int sep_1 = rx_string.indexOf('_', 15);
-      int sep_2 = rx_string.indexOf('_', sep_1 + 1);
-      int sep_3 = rx_string.indexOf('_', sep_2 + 1);
-      int sep_4 = rx_string.indexOf('_', sep_3 + 1);
-      int sep_5 = rx_string.indexOf('_', sep_4 + 1);
-      int sep_6 = rx_string.indexOf('_', sep_5 + 1);
+    else {
+      const char *message_type = doc["message_type"];
+      // debugging
+      // Serial.println(message_type);
 
-      String str1 = rx_string.substring(sep_1 + 1, sep_2);
-      String str2 = rx_string.substring(sep_2 + 1, sep_3);
-      String str3 = rx_string.substring(sep_3 + 1, sep_4);
-      String str4 = rx_string.substring(sep_4 + 1, sep_5);
-      String str5 = rx_string.substring(sep_5 + 1, sep_6);
-      String str6 = rx_string.substring(sep_6 + 1);
+      if (strcmp(message_type, "act_stage_position") == 0)
+      {
 
-      rel_gl1_on = str1.toInt();
-      rel_gl1_off = str2.toInt();
-      rel_gl2_on = str3.toInt();
-      rel_gl2_off = str4.toInt();
-      rel_gl3_on = str5.toInt();
-      rel_gl3_off = str6.toInt();
-    }
+      }
+      else if (strcmp(message_type, "act_toggle_growlight") == 0)
+      {
+        //debugging
+        // Serial.println("act_toggle_growlight");
+        act_toggle_growlight();
+      }
+      else if (strcmp(message_type, "act_toggle_fan") == 0)
+      {
+        act_toggle_fan();
+      }
+      // else if (strcmp(message_type, "config_auto_fan_toggle") == 0)
+      // {
 
-    // toggle growlight manually
-    // received string: "manually_toggle_growlight_{on, off}_{1, 2, 3}"
-    else if (rx_string.indexOf("manually_toggle_growlight_")){
-      int growlight = rx_string.substring(rx_string.lastIndexOf('_') + 1).toInt();
-      int state = (rx_string.indexOf("on")) ? LOW : (rx_string.indexOf("off")) ? HIGH : -1;
-      switch (growlight){
-        case 1:
-          digitalWrite(DPIN_REL_GL1, state);
-          break;
-        case 2:
-          digitalWrite(DPIN_REL_GL2, state);
-          break;
-        case 3:
-          digitalWrite(DPIN_REL_GLX, state);
-          break;
-        default:
-          break;
+      // }
+      else if (strcmp(message_type, "config_growlight_toggle_times") == 0)
+      {
+        update_growlight_toggle_times();
+      }
+      else if (strcmp(message_type, "config_fan_onoff_interval") == 0)
+      {
+        update_fan_toggle_interval();
+      }
+      else if (strcmp(message_type, "query_dht_csms_data") == 0)
+      {
+        send_dht_csms_data();
       }
     }
 
-    // update fan toggle hours
-    // received string: "update_fan_toggle_{int}_{int}_{int}_{int}_{int}_{int}"
-    // int ∈ ℕ∈[0,24]
-    else if (rx_string.indexOf("update_fan_toggle_")){
-      int sep_1 = rx_string.indexOf('_', 16);
-      int sep_2 = rx_string.indexOf('_', sep_1 + 1);
-      int sep_3 = rx_string.indexOf('_', sep_2 + 1);
-      int sep_4 = rx_string.indexOf('_', sep_3 + 1);
-      int sep_5 = rx_string.indexOf('_', sep_4 + 1);
-      int sep_6 = rx_string.indexOf('_', sep_5 + 1);
-
-      String str1 = rx_string.substring(sep_1 + 1, sep_2);
-      String str2 = rx_string.substring(sep_2 + 1, sep_3);
-      String str3 = rx_string.substring(sep_3 + 1, sep_4);
-      String str4 = rx_string.substring(sep_4 + 1, sep_5);
-      String str5 = rx_string.substring(sep_5 + 1, sep_6);
-      String str6 = rx_string.substring(sep_6 + 1);
-
-      rel_fan1_on = str1.toInt();
-      rel_fan1_off = str2.toInt();
-      rel_fan2_on = str3.toInt();
-      rel_fan2_off = str4.toInt();
-      rel_fan3_on = str5.toInt();
-      rel_fan3_off = str6.toInt();
-    }
-
-    // toggle fans manually
-    // received string: "manually_toggle_fan_{on, off}_{1, 2, 3}"
-    else if (rx_string.indexOf("manually_toggle_fan_")){
-      int fan = rx_string.substring(rx_string.lastIndexOf('_') + 1).toInt();
-      int state = (rx_string.indexOf("on")) ? LOW : (rx_string.indexOf("off")) ? HIGH : -1;
-      switch (fan){
-        case 1:
-          digitalWrite(DPIN_REL_FAN1, state);
-          break;
-        case 2:
-          digitalWrite(DPIN_REL_FAN2, state);
-          break;
-        case 3:
-          digitalWrite(DPIN_REL_FAN3, state);
-          break;
-        default:
-          break;
-      }
-    }
-
-    // readout temperature and humidity
-    // received string: "read_dht11"
-    // transmitted string: "inside_{temperature_in}_{humidity_in}_outside_{temperature_out}_{humidity_out}"
-    else if (rx_string.indexOf("read_dht11")){
-      float temp_inside = dht11_temperature(dht_inside);
-      float temp_outside = dht11_temperature(dht_outside);
-      float hum_inside = dht11_humidity(dht_inside);
-      float hum_outside = dht11_humidity(dht_outside);
-      char string[50]; 
-      sprintf(string, "inside_%.1f_%.1f_outside_%.1f_%.1f", (double)temp_inside, (double)hum_inside, (double)temp_outside, (double)hum_outside);
-      Serial.println(string);
-    }
-
-    // readout soil moisture
-    // received string: "read_csms"
-    // transmitted string: "csms1_{val1}_csms2_{val2}_csms3_{val3}_"
-    else if (rx_string.indexOf("read_csms")){
-      float csms1 = csms_level(1);
-      float csms2 = csms_level(2);
-      float csms3 = csms_level(3);
-      char string[50]; 
-      sprintf(string, "csms1_%.1f_csms2_%.1f_csms3_%.1f", (double)csms1, (double)csms2, (double)csms3);
-      Serial.println(string);
-    }
-
-  }  
+  }
+  auto_toggle_growlight();
+  auto_toggle_fan();
 }
 
 // pin modes
@@ -203,5 +138,116 @@ void initialize_pins(){
     pinMode(DPIN_REL_STM, OUTPUT);
     pinMode(DPIN_LB_1, INPUT);
     pinMode(DPIN_LB_2, INPUT);
+}
+
+
+void act_stage_position(){
+  int stage_position = doc["stage_position"];
+  Serial.println(stage_position);
+  if (stage_position >= 1 && stage_position <= 4){
+      // rel_enbl_stm("on");
+      stm_glheight_toggle("on");
+
+      int current_position = stm_stage_current_position();
+
+      delay(500);
+      if (current_position < stage_position){
+        stm_glheight_move("up",stage_position);
+      }
+      else if (current_position > stage_position){
+        stm_glheight_move("down",stage_position);
+      }
+      // rel_enbl_stm("off");
+      stm_glheight_toggle("off");
+  } else {printf("Not a valid stage position.");}
+}
+
+
+void act_toggle_growlight(){
+  int growlight = doc["growlight"];
+  const char *state = doc["state"];
+  Serial.println(growlight);
+  Serial.println(state);
+  rel_toggle_gl(growlight, state);
+}
+
+
+void act_toggle_fan(){
+  int fan = doc["fan"];
+  const char *state = doc["state"];
+  Serial.println(fan);
+  Serial.println(state);
+  rel_toggle_fan(fan, state);
+}
+
+void send_dht_csms_data(){
+  float temperature_inside = dht11_temperature(dht_inside);
+  float temperature_outside = dht11_temperature(dht_outside);
+  float humidity_inside = dht11_humidity(dht_inside);
+  float humidity_outside = dht11_humidity(dht_outside);
+  float soil_moisture_1 = csms_level(1);
+  float soil_moisture_2 = csms_level(2);
+  float soil_moisture_3 = csms_level(3);
+
+  StaticJsonDocument<128> jsonDocument;
+  jsonDocument["temperature_inside"] = temperature_inside;
+  jsonDocument["temperature_outside"] = temperature_outside;
+  jsonDocument["humidity_inside"] = humidity_inside;
+  jsonDocument["humidity_outside"] = humidity_outside;
+  jsonDocument["soil_moisture_1"] = soil_moisture_1;
+  jsonDocument["soil_moisture_2"] = soil_moisture_2;
+  jsonDocument["soil_moisture_3"] = soil_moisture_3;
+
+  String jsonString;
+  serializeJson(jsonDocument, jsonString);
+  Serial1.println(jsonString);
+
+}
+
+void update_growlight_toggle_times(){
+  gl1_on = doc["gl1_on"];
+  gl2_on = doc["gl2_on"];
+  gl3_on = doc["gl3_on"];
+  gl1_off = doc["gl1_off"];
+  gl2_off = doc["gl2_off"];
+  gl3_off = doc["gl3_off"];
+  // Serial.println(gl1_on);
+  // Serial.println(gl1_off);
+
+}
+
+void update_fan_toggle_interval(){
+  fan_on = doc["fan_on"];
+  fan_off = doc["fan_off"];
+}
+
+void auto_toggle_growlight(){
+  // Serial.println("Exc autotogglegl");
+  if (time_now > gl1_on && time_now < gl1_off ){
+    rel_toggle_gl(1, "on");
+    // Serial.println("Turned on 1");
+  }
+  if (time_now > gl2_on && time_now < gl2_off){
+    rel_toggle_gl(2, "on");
+    // Serial.println("Turned on 2");
+  }
+  if (time_now > gl3_on && time_now < gl3_off){
+    rel_toggle_gl(3, "on");
+    // Serial.println("Turned on 3");
+  }
+  if (time_now > gl1_off){
+    rel_toggle_gl(1, "off");
+    // Serial.println("Turned off 1");
+  }
+  if (time_now > gl2_off){
+    rel_toggle_gl(2, "off");
+  }
+  if (time_now > gl3_off){
+    rel_toggle_gl(3, "off");
+  }
+}
+
+void auto_toggle_fan(){
+
 }
 

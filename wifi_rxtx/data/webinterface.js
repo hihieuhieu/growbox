@@ -2,6 +2,8 @@
 // entry point to websocket interface
 var socket = new WebSocket("ws://" + window.location.hostname + ":81/");
 
+let dataReceived = false;
+
 // add event listener: opened connection
 socket.addEventListener('open', function (event){
     console.log('Connected to websocket server');
@@ -10,8 +12,10 @@ socket.addEventListener('open', function (event){
 // add event listener: message from server
 socket.addEventListener('message', function (event){
     const rx_message = JSON.parse(event.data);
-    console.log('Received message: ', rx_message);
-    display_value(rx_message);
+    console.log('Received');
+    dataReceived = true;
+
+    update_DHT_CSMS_data(rx_message);
 });
 
 // add event listener: websocket error
@@ -37,7 +41,7 @@ function display_value(rx_message) {
       'csms2': 'moisture_sens2_field',
       'csms3': 'moisture_sens3_field'
     };
-  
+
     for (const key in rx_message) {
       if (fieldsMap.hasOwnProperty(key)) {
         const fieldId = fieldsMap[key];
@@ -50,7 +54,7 @@ function display_value(rx_message) {
       }
     }
   }
-  
+
 
 // RADIO BUTTONS - Growlight position selection
 // selects all radio buttons with common name atrribute
@@ -71,7 +75,8 @@ radioButtons_growlight_position.forEach(button => {
     var stage_position_value = positionValues[selectedOption] || 0;
 
     const data = {
-        "stage_position": stage_position_value
+        "message_type"    :    "act_stage_position",
+        "stage_position"  :     stage_position_value
     };
     // convert to JSON string
     const jsonString = JSON.stringify(data);
@@ -81,16 +86,16 @@ radioButtons_growlight_position.forEach(button => {
 });
 
 // TOGGLE SWITCHES
+function timeToMinutes(time) {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+
 // Growlights
-function addGrowlightToggleListener(growlightId) {
-  // create object on element id
+
+function addGrowlight1ToggleListener(growlightId) {
   const growlight_toggle = document.getElementById(growlightId);
-  const growlightNumber = {
-    "growlight1_toggle": 1,
-    "growlight2_toggle": 2,
-    "growlight3_toggle": 3,
-  }
-  var growlight_number = growlightNumber[growlightId] || 0;
   // add event listener 'change'
   var isSwitchOn = "";
   growlight_toggle.addEventListener('change', function() {
@@ -98,12 +103,56 @@ function addGrowlightToggleListener(growlightId) {
         isSwitchOn = "on"
       } else {isSwitchOn = "off"}
       const data = {
-          "growlight": growlight_number,
+          "message_type": "act_toggle_growlight",
+          "growlight": 1,
           "state": isSwitchOn
       };
       // convert to JSON string
       const jsonString = JSON.stringify(data);
       // send JSON string over websocket
+      console.log(jsonString);
+      socket.send(jsonString);
+  });
+}
+
+function addGrowlight2ToggleListener(growlightId) {
+  const growlight_toggle = document.getElementById(growlightId);
+  // add event listener 'change'
+  var isSwitchOn = "";
+  growlight_toggle.addEventListener('change', function() {
+      if (growlight_toggle.checked){
+        isSwitchOn = "on"
+      } else {isSwitchOn = "off"}
+      const data = {
+          "message_type": "act_toggle_growlight",
+          "growlight": 2,
+          "state": isSwitchOn
+      };
+      // convert to JSON string
+      const jsonString = JSON.stringify(data);
+      // send JSON string over websocket
+      console.log(jsonString);
+      socket.send(jsonString);
+  });
+}
+
+function addGrowlight3ToggleListener(growlightId) {
+  const growlight_toggle = document.getElementById(growlightId);
+  // add event listener 'change'
+  var isSwitchOn = "";
+  growlight_toggle.addEventListener('change', function() {
+      if (growlight_toggle.checked){
+        isSwitchOn = "on"
+      } else {isSwitchOn = "off"}
+      const data = {
+          "message_type": "act_toggle_growlight",
+          "growlight": 3,
+          "state": isSwitchOn
+      };
+      // convert to JSON string
+      const jsonString = JSON.stringify(data);
+      // send JSON string over websocket
+      console.log(jsonString);
       socket.send(jsonString);
   });
 }
@@ -112,12 +161,7 @@ function addGrowlightToggleListener(growlightId) {
 function addFanToggleListener(fanId) {
   // create object on element id
   const fan_toggle = document.getElementById(fanId);
-  const fanNumber = {
-    "fan1_toggle": 1,
-    "fan2_toggle": 2,
-    "fan3_toggle": 3,
-  }
-  var fan_number = fanNumber[fanId] || 0;
+  var fan_number = 1
   // add event listener 'change'
   var isSwitchOn = "";
   fan_toggle.addEventListener('change', function() {
@@ -125,143 +169,214 @@ function addFanToggleListener(fanId) {
         isSwitchOn = "on"
       } else {isSwitchOn = "off"}
       const data = {
-          "fan": fan_number,
-          "state": isSwitchOn
+          "message_type"  :   "act_toggle_fan",
+          "fan"           :   fan_number,
+          "state"         :   isSwitchOn
       };
-      // convert to JSON string
       const jsonString = JSON.stringify(data);
-      // send JSON string over websocket
       socket.send(jsonString);
+      console.log(jsonString)
+  });
+}
+
+function addFanToggleOnOffListener(fanId) {
+  const fan_onff_toggle = document.getElementById(fanId);
+  fan_number = 1
+  var isSwitchOn = "";
+  fan_onff_toggle.addEventListener('change', function() {
+    if (fan_onff_toggle.checked){
+      isSwitchOn = "on";
+    } else {isSwitchOn = "off"}
+    const data = {
+      "message_type"  : "config_fan_onoff_interval",
+      "fan"           : fan_number,
+      "state"         : isSwitchOn
+    }
+    const jsonString = JSON.stringify(data)
+    socket.send(jsonString)
+    console.log(jsonString)
   });
 }
 
 // Add event listeners for each growlight and fan toggle switch
-addGrowlightToggleListener("growlight1_toggle");
-addGrowlightToggleListener("growlight2_toggle");
-addGrowlightToggleListener("growlight3_toggle");
-addFanToggleListener("fan1_toggle");
-addFanToggleListener("fan2_toggle");
-addFanToggleListener("fan3_toggle");
-
-// Main switches
-
-
+addGrowlight1ToggleListener("growlight1_toggle");
+addGrowlight2ToggleListener("growlight2_toggle");
+addGrowlight3ToggleListener("growlight3_toggle");
+addFanToggleListener("fan_toggle");
+addFanToggleOnOffListener("fan_onoff_toggle")
 
 
 // CONFIGURATIONS
-// function send_gltoggleconfig(component) {
-//     const gl1_on = document.getElementById('gl1_on').value;
-//     const gl1_off = document.getElementById('gl1_off').value;
-//     const gl2_on = document.getElementById('gl2_on').value;
-//     const gl2_off = document.getElementById('gl2_off').value;
-//     const gl3_on = document.getElementById('gl3_on').value;
-//     const gl3_off = document.getElementById('gl3_off').value;
-//     // Create a JSON object with the numeric value
-//     const data = {
-//     value: parseFloat(numericValue) //! write key-/values
-//     };
-//     // Convert JSON object to string before sending
-//     const jsonData = JSON.stringify(data);
-//     // Send the data over the WebSocket connection
-//     socket.send(jsonData);
-// };
-
-// function send_fantoggleconfig(component) {
-//     const fan1_on = document.getElementById('fan1_on').value;
-//     const fan1_off = document.getElementById('fan1_off').value;
-//     const fan2_on = document.getElementById('fan2_on').value;
-//     const fan2_off = document.getElementById('fan2_off').value;
-//     const fan3_on = document.getElementById('fan3_on').value;
-//     const fan3_off = document.getElementById('fan3_off').value;
-//     // Create a JSON object with the numeric value
-//     const data = {
-//     value: parseFloat(numericValue) //! write key-/values
-//     };
-//     // Convert JSON object to string before sending
-//     const jsonData = JSON.stringify(data);
-//     // Send the data over the WebSocket connection
-//     socket.send(jsonData);
-// };
-
 document.getElementById('gl_config_submit').addEventListener('click', function() {
-  // Create an array to store key-value pairs for each fan
-  var glData = [];
+  // var jsonData = {
+  //   "message_type"  : "config_growlight_toggle_times",
+  //   "component"     : "growlight"
+  // };
 
-  // Loop through each gl input
-  for (var i = 1; i <= 3; i++) {
-    // Get the on and off inputs for each gl
-    var onInput = document.getElementById('gl' + i + '_on');
-    var offInput = document.getElementById('gl' + i + '_off');
+  // // Loop through each configuration group
+  // for (let i = 1; i <= 3; i++) {
+  //   // Extract on and off values
+  //   var onTime = document.getElementById('gl' + i + '_on').value;
+  //   var offTime = document.getElementById('gl' + i + '_off').value;
 
-    // Extract gl number from the id
-    var glNumber = i;
+  //   var onMinutes = convertTimeToMinutes(onTime);
+  //   var offMinutes = convertTimeToMinutes(offTime);
 
-    // Extract gl state (on or off) from the id
-    var glState = onInput.id.includes('on') ? 'on' : 'off';
+  //   var partNumberObj = {
+  //     "on": onMinutes,
+  //     "off": offMinutes
+  //   };
 
-    // Extract hour and minute values
-    var onHour = onInput.value.split(':')[0];
-    var onMinute = onInput.value.split(':')[1];
-    var offHour = offInput.value.split(':')[0];
-    var offMinute = offInput.value.split(':')[1];
+  //   jsonData['part_number' + i] = partNumberObj;
+  // }
 
-    // Push the key-value pairs for each gl to the array
-    glData.push({
-      'gl_number': glNumber,
-      'gl_state': glState,
-      'on': {
-        'hour': onHour,
-        'minute': onMinute
-      },
-      'off': {
-        'hour': offHour,
-        'minute': offMinute
-      }
-    });
+  // var jsonString = JSON.stringify(jsonData);
+  const data = {
+    "message_type"  : "config_growlight_toggle_times",
+    "gl1_on"        : convertTimeToMinutes(document.getElementById('gl1_on').value),
+    "gl2_on"        : convertTimeToMinutes(document.getElementById('gl2_on').value),
+    "gl3_on"        : convertTimeToMinutes(document.getElementById('gl3_on').value),
+    "gl1_off"        : convertTimeToMinutes(document.getElementById('gl1_off').value),
+    "gl2_off"        : convertTimeToMinutes(document.getElementById('gl2_off').value),
+    "gl3_off"        : convertTimeToMinutes(document.getElementById('gl3_off').value),
   }
-
-  // Output the collected data to the console (you can modify this part as needed)
-  console.log(glData);
+  var jsonString = JSON.stringify(data)
+  console.log(jsonString);
+  socket.send(jsonString);
 });
 
 
-document.getElementById('fan_config_submit').addEventListener('click', function() {
-  // Create an array to store key-value pairs for each fan
-  var fanData = [];
 
-  // Loop through each fan input
-  for (var i = 1; i <= 3; i++) {
-    // Get the on and off inputs for each fan
-    var onInput = document.getElementById('fan' + i + '_on');
-    var offInput = document.getElementById('fan' + i + '_off');
+// UPDATE TIME AND DATE
+// Function to update date and time on the web page
+function updateTime() {
+  var now = new Date();
+  var dateElement = document.getElementById('date');
+  var timeElement = document.getElementById('time');
 
-    // Extract fan number from the id
-    var fanNumber = i;
+  // Format date as DD.MM.YYYY
+  var optionsDate = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  var formattedDate = now.toLocaleDateString('de-DE', optionsDate);
 
-    // Extract fan state (on or off) from the id
-    var fanState = onInput.id.includes('on') ? 'on' : 'off';
+  // Format time as HH:MM:SS
+  var optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  var formattedTime = now.toLocaleTimeString('de-DE', optionsTime);
 
-    // Extract hour and minute values
-    var onHour = onInput.value.split(':')[0];
-    var onMinute = onInput.value.split(':')[1];
-    var offHour = offInput.value.split(':')[0];
-    var offMinute = offInput.value.split(':')[1];
+  dateElement.innerHTML = 'Date: ' + formattedDate;
+  timeElement.innerHTML = 'Time: ' + formattedTime;
+}
 
-    // Push the key-value pairs for each fan to the array
-    fanData.push({
-      'fan_number': fanNumber,
-      'fan_state': fanState,
-      'on': {
-        'hour': onHour,
-        'minute': onMinute
-      },
-      'off': {
-        'hour': offHour,
-        'minute': offMinute
-      }
-    });
-  }
+// Initialize time variables
+var gl1_on = "";
+var gl1_off = "";
+var gl2_on = "";
+var gl2_off = "";
+var gl3_on = "";
+var gl3_off = "";
+var fan_on = "";
+var fan_off = "";
 
-  // Output the collected data to the console (you can modify this part as needed)
-  console.log(fanData);
+
+// Function to update time variables
+function updateVariables_gl() {
+  gl1_on = document.getElementById('gl1_on').value;
+  gl1_off = document.getElementById('gl1_off').value;
+  gl2_on = document.getElementById('gl2_on').value;
+  gl2_off = document.getElementById('gl2_off').value;
+  gl3_on = document.getElementById('gl3_on').value;
+  gl3_off = document.getElementById('gl3_off').value;
+}
+
+function updateVariables_fan_onoff() {
+  fan_on = document.getElementById('fan_on').value;
+  fan_off = document.getElementById('fan_off').value;
+}
+
+document.getElementById('fan_onoff_config_submit').addEventListener('click', function() {
+  // Update the time variables
+  updateVariables_fan_onoff();
+  const data = {
+    "message_type": "config_fan_onoff_interval",
+    "fan_on": fan_on,
+    "fan_off": fan_off,
+  };
+  jsonString = JSON.stringify(data);
+  socket.send(jsonString);
+  console.log(jsonString)
+
 });
+
+
+// Query data from DHT and CSMS
+function query_DHT_CSMS_data() {
+  const data = {
+    "message_type": "query_dht_csms_data",
+  };
+  jsonString = JSON.stringify(data);
+  socket.send(jsonString);
+  console.log(jsonString)
+
+}
+
+function update_DHT_CSMS_data(rx_message) {
+  if (dataReceived){
+    console.log("Sensor function activated")
+    console.log(rx_message);
+    dataReceived = false;
+
+    var temperature_inside = rx_message.temperature_inside;
+    var temperature_outside = rx_message.temperature_outside;
+    var humidity_inside = rx_message.humidity_inside;
+    var humidity_outside = rx_message.humidity_outside;
+    var soil_moisture_1 = rx_message.soil_moisture_1;
+    var soil_moisture_2 = rx_message.soil_moisture_2;
+    var soil_moisture_3 = rx_message.soil_moisture_3;
+
+
+    updateSensorValue("inside_temperature_field", temperature_inside + "°C");
+    updateSensorValue("outside_temperature_field", temperature_outside + "°C");
+    updateSensorValue("inside_humidity_field", humidity_inside + "%");
+    updateSensorValue("outside_humidity_field", humidity_outside + "%");
+    updateSensorValue("moisture_sens1_field", soil_moisture_1 + " [a.u.]");
+    updateSensorValue("moisture_sens2_field", soil_moisture_2 + " [a.u.]");
+    updateSensorValue("moisture_sens3_field", soil_moisture_3 + " [a.u.]");
+
+  }
+  else {console.log('No data received.')}
+}
+
+document.getElementById('sensor_data').addEventListener('click', function() {
+  query_DHT_CSMS_data();
+  update_DHT_CSMS_data();
+});
+
+function updateSensorValue(elementId, value) {
+  document.getElementById(elementId).textContent = value;
+}
+
+
+function query_and_update_DHT_CSMS(){
+  // query_DHT_CSMS_data();
+  // update_DHT_CSMS_data();
+  console.log("Exected query_and_update_DHT_CSMS")
+}
+
+
+// EXECUTE FUNCTIONS
+
+var query_DHT_CSMS_data_interval = 10000 //30 * 60 * 1000  // 30 minutes * 60 seconds * 1000 ms
+
+window.onload = function() {
+  query_and_update_DHT_CSMS();
+}
+
+setInterval(query_and_update_DHT_CSMS, query_DHT_CSMS_data_interval);
+
+// Function to convert time to minutes
+function convertTimeToMinutes(timeString) {
+  var timeParts = timeString.split(':');
+  var hours = parseInt(timeParts[0], 10);
+  var minutes = parseInt(timeParts[1], 10);
+  return hours * 60 + minutes;
+}
+
